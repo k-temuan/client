@@ -26,3 +26,29 @@ export const FETCH_EVENTS = () => {
       })
   }
 }
+
+export const FETCH_PROFILE_DETAIL = (userId) => {
+  return (dispatch, getState) => {
+  }
+}
+
+export const FETCH_EVENT_DETAIL = (id) => {
+  return (dispatch, getState) => {
+    const cachedEvent = getState().events
+    const event = cachedEvent.filter(item => item.id === id)[0]
+    dispatch({
+      type: "SET_EVENT",
+      payload: event
+    })
+  }
+}
+
+export const FETCH_EVENT_ATENDEES = (eventId) => {
+  return (dispatch, getState) => {
+    const cachedAtendees = getState().event.users;
+    dispatch({
+      type: "SET_ATENDEES",
+      payload: cachedAtendees
+    })
+  }
+}

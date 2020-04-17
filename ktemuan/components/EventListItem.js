@@ -9,7 +9,7 @@ function EventListItem({ navigation, event }) {
   return (
     <Card
       key={event.id}
-      style={[{ minHeight: 65, margin: 5, borderLeftWidth: 10, borderBottomWidth: 10, borderRadius: 0 }, styles.card[event.category ]] }
+      style={[{ minHeight: 65, margin: 5, borderLeftWidth: 10, borderBottomWidth: 10, borderRadius: 0, elevation: 10 }, styles.card[event.category ]] }
       appearance='filled'
       onPress={() => navigation.push('Details', { id: event.id })}
     >

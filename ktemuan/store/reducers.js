@@ -137,6 +137,8 @@ const initialState = {
       "status": "status 04"
     }
   ],
+  event: {},
+  atendees: [],
   category: 'All',
   categories: ['All', 'Game', 'Study', 'Bussiness', 'Meetup']
 }
@@ -144,6 +146,40 @@ const initialState = {
 function reducers(state = initialState, actions) {
   const { type, payload } = actions;
   switch(type) {
+    case "SET_PROFILE": {
+      if (payload) {
+        return {
+          ...state,
+          profile: payload
+        }
+      }
+      return {
+        ...state
+      }
+    }
+    case "SET_ATENDEES": {
+      if (payload) {
+        return {
+          ...state,
+          atendees: payload
+        }
+      }
+      return {
+        ...state
+      }
+    }
+    case "SET_EVENT": {
+      if (payload) {
+        return {
+          ...state,
+          event: payload
+        }
+      } else {
+        return {
+          ...state
+        }
+      }
+    }
     case "SET_CATEGORY": {
       if (state.categories.includes(payload)) {
         return {

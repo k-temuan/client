@@ -29,7 +29,6 @@ function BrowseScreen({ navigation }) {
   const categories = useSelector(state => state.categories);
   const category = useSelector(state => state.category);
 
-  let placeholder = <></>
   if (screenLoading) placeholder = <Text category='h2'>Loading...</Text>
   if (screenError) placeholder = <Text category='h2'>Error...</Text>
 
@@ -56,8 +55,8 @@ function BrowseScreen({ navigation }) {
         </ScrollView> :
         <TouchableHighlight onPress={() => setToggleOption(!toggleOption)}>
           <Layout style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text category='h1'>{category} Events</Text>
-            <Button>Create Event</Button>
+            <Text category='h2'>{category} Events</Text>
+            <Button onPressOut={() => navigation.navigate('Create')}>Create Event</Button>
           </Layout>
         </TouchableHighlight>
       }

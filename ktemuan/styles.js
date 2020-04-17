@@ -13,6 +13,9 @@ export const styles = {
     },
     study: {
       borderColor: '#05DFD7'
+    },
+    shadow: {
+      elevation: 2
     }
-  }
+  },
 }
