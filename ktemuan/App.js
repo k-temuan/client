@@ -10,6 +10,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import BrowseScreen from './screens/BrowseScreen';
+import DetailScreen from './screens/DetailsScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import CreateEventForm from './screens/CreateEventForm';
 
 import reducers from './store/reducers';
 
@@ -23,6 +26,9 @@ export default function App() {
         <ApplicationProvider {...eva} theme={ eva.dark }>
           <Stack.Navigator>
             <Stack.Screen name="Browse" component={ BrowseScreen } />
+            <Stack.Screen name="Details" component={ DetailScreen } />
+            <Stack.Screen name="Profile" component= { ProfileScreen } />
+            <Stack.Screen name="Create" component={ CreateEventForm } />
           </Stack.Navigator>
         </ApplicationProvider>
       </NavigationContainer>

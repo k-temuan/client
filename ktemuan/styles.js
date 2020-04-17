@@ -1,18 +1,18 @@
 // https://colorhunt.co/palette/169700
 
 export const styles = {
-  category: {
+  card: {
     game: {
-      color: '#EC7373'
+      borderColor: '#EC7373'
     },
     meetup: {
-      color: '#FFE196'
+      borderColor: '#FFE196'
     },
     bussiness: {
-      color: '#D8B5B5'
+      borderColor: '#D8B5B5'
     },
     study: {
-      color: '#05DFD7'
+      borderColor: '#05DFD7'
     }
   }
 }
