@@ -1,19 +1,16 @@
 import React from 'react';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-// import thunk from 'redux-thunk';
 import thunk from 'redux-thunk'
+import { createStackNavigator } from '@react-navigation/stack';
 
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
-import BrowseScreen from './screens/BrowseScreen';
-import DetailScreen from './screens/DetailsScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import CreateEventForm from './screens/CreateEventForm';
-import AtendeeListScreen from './screens/AtendeeListScreen';
+import BrowsingStack from './stacks/BrowsingStack';
+import LandingNavigator from './stacks/LandingNavigator';
+import LoadingSplashScreen from './screens/LoadingSplashScreen';
 
 import reducers from './store/reducers';
 
@@ -25,12 +22,10 @@ export default function App() {
     <Provider store={ store }>
       <NavigationContainer>
         <ApplicationProvider {...eva} theme={ eva.dark }>
-          <Stack.Navigator>
-            <Stack.Screen name="Browse" component={ BrowseScreen } />
-            <Stack.Screen name="Details" component={ DetailScreen } />
-            <Stack.Screen name="Profile" component= { ProfileScreen } />
-            <Stack.Screen name="Create" component={ CreateEventForm } />
-            <Stack.Screen name="Atendee" component={ AtendeeListScreen } />
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="LoadingSplash" component={ LoadingSplashScreen } />
+            <Stack.Screen name="Landing" component={ LandingNavigator } />
+            <Stack.Screen name="Browsing" component={ BrowsingStack }/>
           </Stack.Navigator>
         </ApplicationProvider>
       </NavigationContainer>
