@@ -1,10 +1,13 @@
 import React from 'react';
-import { Layout, Text, Input, Button, Avatar, Divider } from '@ui-kitten/components';
+import { Layout, Text, Input, Button, Avatar, Divider, Icon } from '@ui-kitten/components';
 import { useSelector, useDispatch } from 'react-redux';
+import { TouchableWithoutFeedback } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { POST_REGISTER, CHECK_PERSISTED_CRED } from '../store/actions';
 
 import { AsyncStorage } from 'react-native';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -16,15 +19,30 @@ function RegisterScreen({ navigation }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [photo, setPhoto] = React.useState('');
+  const [showChar, setShowChar] = React.useState(false);
 
+  // const [firstnameError, setFirstnameError] = React.useState(registerError.firstname || '');
+  // const [lastnameError, setLastnameError] = React.useState(registerError.lastname || '');
+  // const [emailError, setEmailError] = React.useState(registerError.email || '');
+  // const [passwordError, setPasswordError] = React.useState(registerError.password || '');
+
+  function toggleShowChar() {
+    setShowChar(!showChar)
+  }
   function handlePressOut() {
-    // development: mock persisted cred is exist
-    dispatch(CHECK_PERSISTED_CRED())
-
     // clear error baru dispatch yg lain
     dispatch({
       type: "CLEAR_REGISTER_ERROR"
     })
+    const body = {
+      firstname: firstName,
+      lastname: lastName,
+      email,
+      password,
+      photo_url: photo,
+    }
+
+    dispatch(POST_REGISTER(body))
   }
 
   if (needLogin === false && navigation.isFocused()) {
@@ -35,6 +53,12 @@ function RegisterScreen({ navigation }) {
     });
   }
 
+  const renderIcon = (props) => (
+    <TouchableWithoutFeedback onPress={toggleShowChar}>
+      <Icon {...props} name={showChar ? 'eye-outline' : 'eye-off-outline'} />
+    </TouchableWithoutFeedback>
+  )
+
   return (
     <Layout style={{ flex: 1, padding: 15 }}>
       <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -42,35 +66,52 @@ function RegisterScreen({ navigation }) {
         <Text style={{ fontWeight: 'bold'}}>K-TEAM-ONE</Text>
       </Layout>
       <Layout style={{ flex: 3 }}>
-        <Input
-          placeholder='Email'
-          value={email}
-          onChangeText={setEmail}
-        />
-        <Input
-          placeholder='Password'
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
-        />
-        <Input
-          placeholder='First Name'
-          value={firstName}
-          onChangeText={setFirstName}
-        />
-        <Input
-          placeholder='Last Name'
-          value={lastName}
-          onChangeText={setLastName}
-        />
-        <Input
-          placeholder='Photo'
-          value={photo}
-          onChangeText={setPhoto}
-        />
-        <Button>Pickaphoto</Button>
-        <Divider />
-        <Button onPressOut={handlePressOut}>Register</Button>
+        <KeyboardAwareScrollView>
+          <Input
+            placeholder='Email'
+            value={email}
+            onChangeText={setEmail}
+            caption={ registerError.email || '' }
+            status={registerError.email ? 'danger' : ''}
+          />
+          <Divider />
+          <Input
+            placeholder='Password'
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showChar}
+            accessoryRight={renderIcon}
+            caption={ registerError.password || '' }
+            status={registerError.password ? 'danger' : ''}
+          />
+          <Divider />
+          <Input
+            placeholder='First Name'
+            value={firstName}
+            onChangeText={setFirstName}
+            caption={ registerError.firstname || '' }
+            status={registerError.firstname ? 'danger' : ''}
+          />
+          <Divider />
+          <Input
+            placeholder='Last Name'
+            value={lastName}
+            onChangeText={setLastName}
+            caption={ registerError.lastname || '' }
+            status={registerError.lastname ? 'danger' : ''}
+          />
+          <Divider />
+          <Input
+            placeholder='Photo'
+            value={photo}
+            onChangeText={setPhoto}
+            caption='Photo error placeholder'
+          />
+          <Divider />
+          <Button>Pickaphoto</Button>
+          <Divider />
+          <Button onPressOut={handlePressOut}>Register</Button>
+        </KeyboardAwareScrollView>
       </Layout>
     </Layout>
   )

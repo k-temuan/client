@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Avatar, Text, Card, Button } from '@ui-kitten/components';
-import { styles } from '../styles';
+import { styles } from '../../styles';
 import { TouchableHighlight } from 'react-native';
 
 const ava_url = 'https://api.adorable.io/avatars/80/lele@goyang.com.png'

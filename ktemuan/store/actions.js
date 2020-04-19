@@ -2,16 +2,18 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { SERVER_URL } from 'react-native-dotenv';
 
-const apiURL = SERVER_URL || 'http://localhost:3000'
+const apiURL = 'http://192.168.43.189:3000'
 const appStorageKey = 'ktemuan@AsyncStorage';
 
-function objErrorFromMsg(msg) {
+function objErrorFromArrMsg(arrMsg) {
   // generate registerError msg from string error message
   let result = {}
-  let selector = ['password', 'email', 'first name', 'last name']
-  selector.forEach(item => {
-    if (msg.toLowerCase().includes(item)) result[item] = msg
-    else result.message = msg
+  let selector = ['password', 'email', 'firstname', 'lastname']
+  arrMsg.forEach(msg => {
+    selector.forEach(item => {
+      if (msg.toLowerCase().includes(item)) result[item] = msg
+      else result.message = msg
+    })
   })
   return result
 }
@@ -21,31 +23,32 @@ export const CHECK_PERSISTED_CRED = () => {
     let objCred = {}
     AsyncStorage.getItem(appStorageKey)
       .then(result => {
-        console.log(JSON.parse(result));
+        // console.log(JSON.parse(result));
         if (result) {
           objCred = JSON.parse(result);
-          // for dev
-          dispatch({
-            type: "SET_USER_CRED",
-            payload: objCred
-          })
-          dispatch({
-            type: "TOGGLE_NEED_LOGIN",
-            payload: false
-          })
-          
+          // to skip register/login page dev
+          // dispatch({
+          //   type: "SET_USER_CRED",
+          //   payload: objCred
+          // })
+          // dispatch({
+          //   type: "TOGGLE_NEED_LOGIN",
+          //   payload: false
+          // })
+
+          // ENABLE IF SERVER AVAILABLE
           // how to check if token is valid? currently, fetch something
-          // if (objCred.access_token) {
-          //   return axios({
-          //     url: `${apiURL}/users/9999`,
-          //     method: 'GET',
-          //     headers: {
-          //       access_token: objCred.access_token
-          //     }
-          //   })
-          // } else {
-          //   throw new Error('NO_PERSISTED_TOKEN')
-          // }
+          if (objCred.access_token) {
+            return axios({
+              url: `${apiURL}/users/9999`,
+              method: 'GET',
+              headers: {
+                access_token: objCred.access_token
+              }
+            })
+          } else {
+            throw new Error('NO_PERSISTED_TOKEN')
+          }
         } else {
           throw new Error('NO_PERSISTED_CRED')
         }
@@ -75,8 +78,9 @@ export const CHECK_PERSISTED_CRED = () => {
 export const SAVE_CRED = (credObj) => {
   return (dispatch) => {
     // currently replacing all parsed data in async storage
-    AsyncStorage.setItem(appStorageKey, JSON.stringify(objCred))
+    AsyncStorage.setItem(appStorageKey, JSON.stringify(credObj))
       .then(_ => {
+        
         // from axios, save to asyncstorage
         dispatch({
           type: "SET_USER_CRED",
@@ -86,60 +90,157 @@ export const SAVE_CRED = (credObj) => {
           type: "TOGGLE_NEED_LOGIN",
           payload: false
         })
+        console.log('cred saved to async storage')
+      })
+      .catch(err => {
+        dispatch({
+          type: "SET_TEST_VALUE",
+          payload: err.message
+        })
       })
   }
 }
 
 export const POST_LOGIN = (body) => {
   return (dispatch) => {
-    //axios resolve usercred
-    let data = {}
-    dispatch(SAVE_CRED())
-    //axios reject error
-    let errorMsg = '';
+    const { email, password } = body;
+    
     dispatch({
-      type: "SET_LOGIN_ERROR",
-      payload: errorMsg
+      type: "TOGGLE_LOGIN_LOADING",
+      payload: true
     })
+
+    //axios resolve usercred
+    axios({
+      url: `${apiURL}/login`,
+      method: 'POST',
+      data: { email, password }
+    })
+      .then(({ data }) => {
+        dispatch(SAVE_CRED(data))
+      })
+      .catch(err => {
+        if (err.response) {
+          let msg = err.response.data.errors[0] || 'error undefined'
+          dispatch({
+            type: "SET_LOGIN_ERROR",
+            payload: { message: msg }
+          })
+        } else {
+          dispatch({
+            type: "SET_LOGIN_ERROR",
+            payload: { message: err.message }
+          })
+        }
+      })
+      .finally(_ => {
+        dispatch({
+          type: "TOGGLE_LOGIN_LOADING",
+          payload: false
+        })
+      })
   }
 }
 
 export const POST_REGISTER = (body) => {
   return (dispatch) => {
-    //axios resolve usercred
-    let data = {}
-    dispatch(SAVE_CRED(data))
-    //axios reject register error
-    let objError = objErrorFromMsg(err.response.error.message) // ???
+    const { firstname, lastname, email, password, photo_url } = body;
     dispatch({
-      type: "SET_REGISTER_ERROR",
-      payload: obj
+      type: 'TOGGLE_REGISTER_LOADING',
+      payload: true
+    })
+
+    //axios resolve usercred
+    axios({
+      url: `${apiURL}/register`,
+      method: 'POST',
+      data: body
+    })
+    .then(({ data }) => {
+      let objCred = {
+        access_token: data.access_token,
+        user: {...data.user}
+      }
+      dispatch(SAVE_CRED(objCred))
+    })
+    .catch(err => {
+      if (err.response) {
+        let objError = objErrorFromArrMsg(err.response.data.errors);
+        dispatch({
+          type: "SET_REGISTER_ERROR",
+          payload: objError
+        })
+      } else {
+        dispatch({
+          type: "SET_REGISTER_ERROR",
+          payload: err.message
+        })
+      }
+    })
+    .finally(_ => {
+      dispatch({
+        type: 'TOGGLE_REGISTER_LOADING',
+        payload: false
+      })
     })
   }
 }
 
-export const FETCH_EVENTS = () => {
+export const FETCH_EVENTS = ({ userCred }) => {
   return (dispatch) => {
+    let events_status_template = {
+      loading: false,
+      empty: false,
+      error: null,
+    }
+    
     dispatch({
       type: "SET_SCREEN_LOADING",
       payload: true
     })
+    dispatch({
+      type: "SET_EVENTS_STATUS",
+      payload: {
+        ...events_status_template,
+        loading: true
+      }
+    })
     axios({
       url: `${apiURL}/events`,
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        access_token: userCred.access_token
+      }
     })
       .then(({ data }) => {
         dispatch({
           type: "SET_EVENTS",
           payload: data.events
         })
+        if (data.length === 0) {
+          events_status_template = {
+            ...events_status_template,
+            empty: true
+          }
+        }
       })
       .catch((err) => {
+        events_status_template = {
+          ...events_status_template,
+          error: 'error'
+        }
       })
       .finally(_ => {
         dispatch({
           type: "SET_SCREEN_LOADING",
           payload: false
+        })
+        dispatch({
+          type: "SET_EVENTS_STATUS",
+          payload: {
+            ...events_status_template,
+            loading: false
+          }
         })
       })
   }

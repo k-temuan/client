@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Text } from '@ui-kitten/components';
+import { Layout, Text, Spinner } from '@ui-kitten/components';
 import { useDispatch } from 'react-redux';
 import { CHECK_PERSISTED_CRED } from '../store/actions';
 import { AsyncStorage } from 'react-native';
@@ -22,14 +22,18 @@ function LoadingSplashScreen({ navigation }) {
     return AsyncStorage.setItem('ktemuan@AsyncStorage', JSON.stringify(objCred))
   }
   if (navigation.isFocused()) {
-    mockPersistedCred()
-    // checkServer()
-      .then(_ => {
-        dispatch(CHECK_PERSISTED_CRED())
-        setTimeout(() => {
-          navigation.navigate('Landing')
-        }, 1000)
-      })
+    // mockPersistedCred()
+    // // checkServer()
+    //   .then(_ => {
+    //     dispatch(CHECK_PERSISTED_CRED())
+    //     setTimeout(() => {
+    //       navigation.navigate('Landing')
+    //     }, 1000)
+    //   })
+    dispatch(CHECK_PERSISTED_CRED())
+    setTimeout(() => {
+      navigation.navigate('Landing')
+    }, 1000)
   }
 
   // dispatch(CHECK_PERSISTED_CRED)

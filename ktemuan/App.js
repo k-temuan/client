@@ -3,6 +3,8 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk'
 import { createStackNavigator } from '@react-navigation/stack';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { IconRegistry } from '@ui-kitten/components';
 
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
@@ -22,6 +24,7 @@ export default function App() {
     <Provider store={ store }>
       <NavigationContainer>
         <ApplicationProvider {...eva} theme={ eva.dark }>
+          <IconRegistry icons={EvaIconsPack} />
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="LoadingSplash" component={ LoadingSplashScreen } />
             <Stack.Screen name="Landing" component={ LandingNavigator } />

@@ -11,6 +11,11 @@ const initialState = {
   },
   screenLoading: false,
   screenError: null,
+  events_status: {
+    loading: false,
+    empty: false,
+    error: null,
+  },
   events: [
     { 
       "id": 1,
@@ -155,19 +160,34 @@ const initialState = {
     lastname: null,
     email: null,
     photo_url: null,
-    passowrd: null
+    password: null
   },
+  registerLoading: true,
   loginError: {
     email: null,
     password: null,
     message: null
   },
+  loginLoading: false,
   testVal: ''
 }
 
 function reducers(state = initialState, actions) {
   const { type, payload } = actions;
   switch(type) {
+    case "TOGGLE_LOGIN_LOADING": {
+      if (payload) {
+        return {
+          ...state,
+          loginLoading: payload
+        }
+      } else {
+        return {
+          ...state,
+          loginLoading: !state.loginLoading
+        }
+      }
+    }
     case "CLEAR_LOGIN_ERROR": {
       return {
         ...state,
@@ -183,9 +203,22 @@ function reducers(state = initialState, actions) {
         ...state,
         loginError: {
           ...state.loginError,
-          email: payload.email,
-          password: payload.password,
-          message: payload.message
+          email: payload.email || null,
+          password: payload.password || null,
+          message: payload.message || null
+        }
+      }
+    }
+    case "TOGGLE_REGISTER_LOADING": {
+      if (payload) {
+        return {
+          ...state,
+          registerLoading: payload
+        }
+      } else {
+        return {
+          ...state,
+          registerLoading: !state.registerLoading
         }
       }
     }
@@ -197,7 +230,7 @@ function reducers(state = initialState, actions) {
           lastname: payload.lastname,
           email: payload.email,
           photo_url: payload.photo_url,
-          passowrd: payload.password
+          password: payload.password
         }
       }
     }
@@ -304,6 +337,12 @@ function reducers(state = initialState, actions) {
         events: payload
       }
     }
+    case "SET_EVENTS_STATUS": {
+      return {
+        ...state,
+        events_status: payload
+      }
+    }
     case "SET_SCREEN_ERROR": {
       return {
         ...state,
@@ -316,7 +355,7 @@ function reducers(state = initialState, actions) {
         screenLoading: payload
       }
     }
-    case "SET_TEST_VALUER": {
+    case "SET_TEST_VALUE": {
       return {
         ...state,
         testVal: payload
