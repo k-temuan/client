@@ -16,7 +16,8 @@ const initialState = {
     empty: false,
     error: null,
   },
-  events: [
+  events: [],
+  events2: [
     { 
       "id": 1,
       "datetime": "2020-04-16T15:24:18.196Z",
@@ -152,6 +153,11 @@ const initialState = {
     }
   ],
   event: {},
+  ////////////////////////////////////////
+  event_status: {
+    postEvent: 'create', // ['create', 'success']
+    postLoading: false
+  },
   atendees: [],
   category: 'All',
   categories: ['All', 'Game', 'Study', 'Bussiness', 'Meetup'],
@@ -175,6 +181,43 @@ const initialState = {
 function reducers(state = initialState, actions) {
   const { type, payload } = actions;
   switch(type) {
+    case "TOGGLE_SUBMIT_EVENT_LOADING": {
+      if (!payload) {
+        return {
+          ...state,
+          event_status: {
+            ...state.event_status,
+            postLoading: !state.event_status.postLoading
+          }
+        }
+      } else {
+        return {
+          ...state,
+          event_status: {
+            ...state.event_status,
+            postLoading: payload
+          }
+        }
+      }
+    }
+    case "TOGGLE_SUBMIT_EVENT_SUCCESS": {
+      return {
+        ...state,
+        event_status: {
+          ...state.event_status,
+          postEvent: 'success'
+        }
+      }
+    }
+    case "TOGGLE_SUBMIT_EVENT": {
+      return {
+        ...state,
+        event_status: {
+          ...state.event_status,
+          postEvent: 'create'
+        }
+      }
+    }
     case "TOGGLE_LOGIN_LOADING": {
       if (payload) {
         return {

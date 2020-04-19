@@ -26,6 +26,16 @@ function RegisterScreen({ navigation }) {
   // const [emailError, setEmailError] = React.useState(registerError.email || '');
   // const [passwordError, setPasswordError] = React.useState(registerError.password || '');
 
+  React.useEffect(() => {
+    if (needLogin === false && navigation.isFocused()) {
+      navigation.navigate('Browsing');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Browsing' }],
+      });
+    }
+  }, [needLogin])
+
   function toggleShowChar() {
     setShowChar(!showChar)
   }

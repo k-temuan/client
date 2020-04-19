@@ -9,8 +9,8 @@ const Tab = createMaterialTopTabNavigator()
 function LandingNavigator() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Register" component={ RegisterScreen } />
       <Tab.Screen name="Login" component={ LoginScreen } />
+      <Tab.Screen name="Register" component={ RegisterScreen } />
     </Tab.Navigator>
   )
 }

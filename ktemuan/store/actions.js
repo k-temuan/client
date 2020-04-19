@@ -2,7 +2,8 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import { SERVER_URL } from 'react-native-dotenv';
 
-const apiURL = 'http://192.168.43.189:3000'
+const apiURL = 'http://192.168.43.189:3000';
+
 const appStorageKey = 'ktemuan@AsyncStorage';
 
 function objErrorFromArrMsg(arrMsg) {
@@ -16,6 +17,88 @@ function objErrorFromArrMsg(arrMsg) {
     })
   })
   return result
+}
+function submitEventErrorFromArrMsg(arrMsg) {
+  let result = {}
+  let selecter = ['']
+}
+
+export const POST_EVENT = (inputObj) => {
+  return (dispatch) => {
+    const {
+      name,
+      category,
+      description,
+      max_attendees,
+      location,
+      date_time,
+      file,
+      userCred
+    } = inputObj;
+
+    let body = new FormData()
+    let newCategory = category.toLowerCase();
+    body.append("image", file);
+    body.append("category", newCategory);
+    body.append("name", name);
+    body.append("description", description);
+    body.append("max_attendees", max_attendees);
+    body.append("date_time", date_time);
+    body.append("location", location);
+    // body = {
+    //   name,
+    //   newCategory,
+    //   description,
+    //   max_attendees,
+    //   location,
+    //   date_time,
+    //   file
+    // }
+
+    console.log('send body to post/events');
+    console.log(apiURL);
+    dispatch({
+      type: "TOGGLE_SUBMIT_EVENT_LOADING",
+      payload: true
+    })
+
+    // axios issue, content-type field on headers are deleted, resulting Network Error
+    axios({
+      url: `${apiURL}/events`,
+      method: "POST",
+      data: body,
+      headers: {
+        access_token: userCred.access_token,
+        'Content-Type': 'multipart/form-data;charset=utf-8;',
+        Content_Type: 'multipart/form-data'
+      }
+    })
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(Object.keys(err))
+        if (err.message === 'Network Error') {
+          for (let key of Object.keys(err)) {
+            console.log(err[key])
+          }
+        }
+        console.log('error?')
+        dispatch({
+          type: "TOGGLE_SUBMIT_EVENT"
+        })
+      })
+      .finally(_ => {
+        // navigate to browsing
+        // if success toggle submit event success
+        console.log("finished?")
+        dispatch({
+          type: "TOGGLE_SUBMIT_EVENT_LOADING",
+          payload: false
+        })
+      })
+    
+  }
 }
 
 export const CHECK_PERSISTED_CRED = () => {
@@ -193,11 +276,6 @@ export const FETCH_EVENTS = ({ userCred }) => {
       empty: false,
       error: null,
     }
-    
-    dispatch({
-      type: "SET_SCREEN_LOADING",
-      payload: true
-    })
     dispatch({
       type: "SET_EVENTS_STATUS",
       payload: {
@@ -225,23 +303,24 @@ export const FETCH_EVENTS = ({ userCred }) => {
         }
       })
       .catch((err) => {
+        // 
+        if (err.response) console.log(err.response.data.errors)
+        let msg = err.response.data.errors[0];
         events_status_template = {
           ...events_status_template,
-          error: 'error'
+          error: msg
         }
       })
       .finally(_ => {
-        dispatch({
-          type: "SET_SCREEN_LOADING",
-          payload: false
-        })
-        dispatch({
-          type: "SET_EVENTS_STATUS",
-          payload: {
-            ...events_status_template,
-            loading: false
-          }
-        })
+        setTimeout(() => {
+          dispatch({
+            type: "SET_EVENTS_STATUS",
+            payload: {
+              ...events_status_template,
+              loading: false
+            }
+          })
+        }, 1000)
       })
   }
 }

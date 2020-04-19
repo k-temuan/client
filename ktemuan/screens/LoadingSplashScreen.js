@@ -19,7 +19,7 @@ function LoadingSplashScreen({ navigation }) {
           photo_url: 'https://i1.sndcdn.com/artworks-000362148141-i3ilpf-t500x500.jpg'
       }
     }
-    return AsyncStorage.setItem('ktemuan@AsyncStorage', JSON.stringify(objCred))
+    // return AsyncStorage.setItem('ktemuan@AsyncStorage', JSON.stringify(objCred))
   }
   if (navigation.isFocused()) {
     // mockPersistedCred()

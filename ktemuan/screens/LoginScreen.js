@@ -10,9 +10,19 @@ function LoginScreen({ navigation, route }) {
   const loginError = useSelector(state => state.loginError);
   const loginLoading = useSelector(state => state.loginLoading);
   
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = React.useState('lele@yeye.com');
+  const [password, setPassword] = React.useState('leleyeye');
 
+  React.useEffect(() => {
+    if (needLogin === false && navigation.isFocused()) {
+      navigation.navigate('Browsing');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Browsing' }],
+      });
+    }
+  }, [needLogin])
+  
   function handlePressOut() {
     dispatch({
       type: "CLEAR_LOGIN_ERROR"
@@ -25,13 +35,6 @@ function LoginScreen({ navigation, route }) {
       dispatch(POST_LOGIN(body))
       // setEmail('');
       // setPassword('');
-    }
-    if (needLogin === false && navigation.isFocused()) {
-      navigation.navigate('Browsing');
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Browsing' }],
-      });
     }
   }
   
