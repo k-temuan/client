@@ -20,7 +20,29 @@ function objErrorFromArrMsg(arrMsg) {
 }
 function submitEventErrorFromArrMsg(arrMsg) {
   let result = {}
-  let selecter = ['']
+  let selector = {
+    keyword: ['date/time', 'event name', 'category', 'event description', 'maximum attendees'],
+    field: ['datetime', 'name', 'category', 'description', 'maxAttendees']
+  }
+  arrMsg.forEach(msg => {
+    selector.keyword.forEach((item, index) => {
+      if (msg.toLowerCase().includes(item)) result[selector.field[index]] = msg
+    })
+  })
+  
+  return result
+  // {
+  //   "errors": Array [
+  //     "You must select date/time in the future",
+  //     "Event name cannot be empty",
+  //     "Category cannot be empty",
+  //     "Category is not valid",
+  //     "Event description cannot be empty",
+  //     "Event description at least has 10 characters",
+  //     "Maximum attendees cannot be empty",
+  //   ],
+  //   "message": "Bad Request",
+  // }
 }
 
 export const POST_EVENT = (inputObj) => {
@@ -45,6 +67,7 @@ export const POST_EVENT = (inputObj) => {
     body.append("max_attendees", max_attendees);
     body.append("date_time", date_time);
     body.append("location", location);
+    body.append("tags", [[]])
     // body = {
     //   name,
     //   newCategory,
@@ -52,7 +75,8 @@ export const POST_EVENT = (inputObj) => {
     //   max_attendees,
     //   location,
     //   date_time,
-    //   file
+    //   file,
+    //   fileBuffer
     // }
 
     console.log('send body to post/events');
@@ -66,24 +90,36 @@ export const POST_EVENT = (inputObj) => {
     axios({
       url: `${apiURL}/events`,
       method: "POST",
-      data: body,
       headers: {
         access_token: userCred.access_token,
-        'Content-Type': 'multipart/form-data;charset=utf-8;',
-        Content_Type: 'multipart/form-data'
-      }
+        'Content-Type': 'multipart/form-data',
+      },
+      data: body,
     })
       .then(res => {
         console.log(res)
+        dispatch({
+          type: "TOGGLE_SUBMIT_EVENT_SUCCESS"
+        })
       })
       .catch(err => {
-        console.log(Object.keys(err))
+        // console.log(Object.keys(err))
         if (err.message === 'Network Error') {
           for (let key of Object.keys(err)) {
             console.log(err[key])
           }
+        } else if (err.response) {
+          console.log(err.response.data.errors)
+          let objError = submitEventErrorFromArrMsg(err.response.data.errors || []);
+          dispatch({
+            type: "SET_SUBMIT_EVENT_ERROR",
+            payload: objError
+          })
+        } else {
+          console.log(err)
         }
         console.log('error?')
+        console.log(err)
         dispatch({
           type: "TOGGLE_SUBMIT_EVENT"
         })
@@ -123,7 +159,7 @@ export const CHECK_PERSISTED_CRED = () => {
           // how to check if token is valid? currently, fetch something
           if (objCred.access_token) {
             return axios({
-              url: `${apiURL}/users/9999`,
+              url: `${apiURL}/events/1`,
               method: 'GET',
               headers: {
                 access_token: objCred.access_token
@@ -146,14 +182,36 @@ export const CHECK_PERSISTED_CRED = () => {
           payload: false
         })
       })
-      .catch(_ => {
-        dispatch({
-          type: "CLEAR_USER_CRED"
-        })
-        dispatch({
-          type: "TOGGLE_NEED_LOGIN",
-          payload: true
-        })
+      .catch(err => {
+        // if (err.response) console.log(err.response);
+        if (err.response) {
+          if (err.response.status === 404) {
+            dispatch({
+              type: "SET_USER_CRED",
+              payload: objCred
+            })
+            dispatch({
+              type: "TOGGLE_NEED_LOGIN",
+              payload: false
+            })
+          } else {
+            dispatch({
+              type: "CLEAR_USER_CRED"
+            })
+            dispatch({
+              type: "TOGGLE_NEED_LOGIN",
+              payload: true
+            })
+          }
+        } else {
+          dispatch({
+            type: "CLEAR_USER_CRED"
+          })
+          dispatch({
+            type: "TOGGLE_NEED_LOGIN",
+            payload: true
+          })
+        }
       })
   }
 }
@@ -163,7 +221,7 @@ export const SAVE_CRED = (credObj) => {
     // currently replacing all parsed data in async storage
     AsyncStorage.setItem(appStorageKey, JSON.stringify(credObj))
       .then(_ => {
-        
+        console.log(credObj)
         // from axios, save to asyncstorage
         dispatch({
           type: "SET_USER_CRED",
@@ -204,7 +262,10 @@ export const POST_LOGIN = (body) => {
       })
       .catch(err => {
         if (err.response) {
-          let msg = err.response.data.errors[0] || 'error undefined'
+          let msg = 'error undefined';
+          if (err.response.data) {
+            msg = err.response.data.errors[0] || 'error undefined'
+          }
           dispatch({
             type: "SET_LOGIN_ERROR",
             payload: { message: msg }
@@ -304,23 +365,34 @@ export const FETCH_EVENTS = ({ userCred }) => {
       })
       .catch((err) => {
         // 
-        if (err.response) console.log(err.response.data.errors)
-        let msg = err.response.data.errors[0];
-        events_status_template = {
-          ...events_status_template,
-          error: msg
+        if (err.response) {
+          for (let key of Object.keys(err)) {
+            console.log(err[key])
+          }
+          try {
+            console.log(err.response.data.errors)
+            let msg = err.response.data.errors[0];
+            events_status_template = {
+              ...events_status_template,
+              error: msg
+            }
+          } 
+          catch (error) {
+            console.log(error.message)
+            for (let key of Object.keys(error)) {
+              console.log(error[key])
+            }
+          }
         }
       })
       .finally(_ => {
-        setTimeout(() => {
-          dispatch({
-            type: "SET_EVENTS_STATUS",
-            payload: {
-              ...events_status_template,
-              loading: false
-            }
-          })
-        }, 1000)
+        dispatch({
+          type: "SET_EVENTS_STATUS",
+          payload: {
+            ...events_status_template,
+            loading: false
+          }
+        })
       })
   }
 }

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Layout, Text, Spinner } from '@ui-kitten/components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CHECK_PERSISTED_CRED } from '../store/actions';
 import { AsyncStorage } from 'react-native';
 
 function LoadingSplashScreen({ navigation }) {
   const dispatch = useDispatch()
+  const needlogin = useSelector(state => state.needlogin);
 
   // development: mock persisted cred is exist
   function mockPersistedCred() {
@@ -31,9 +32,19 @@ function LoadingSplashScreen({ navigation }) {
     //     }, 1000)
     //   })
     dispatch(CHECK_PERSISTED_CRED())
-    setTimeout(() => {
-      navigation.navigate('Landing')
-    }, 1000)
+    if (needlogin) {
+      navigation.navigate('Landing');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Landing' }],
+      });
+    } else {
+      navigation.navigate('Browsing');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Browsing' }],
+      });
+    }
   }
 
   // dispatch(CHECK_PERSISTED_CRED)

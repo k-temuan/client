@@ -14,6 +14,7 @@ function CreateEventForm({ navigation }) {
 
   const userCred = useSelector(state => state.userCred);
   const event_status = useSelector(state => state.event_status);
+  const submitEventError = useSelector(state => state.submitEventError);
 
   React.useEffect(() => {
     // TOGGLE_SUBMIT_EVENT_SUCCESS
@@ -35,15 +36,13 @@ function CreateEventForm({ navigation }) {
   const [date, setDate] = React.useState(new Date());
   const categories = ['Game', 'Meetup', 'Study', 'Bussiness'];
 
-  // const [category, setCategory] = React.useState('');
-  // const [dateTime, setDateTime] = React.useState('');
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [maxAttendees, setMaxAttendees] = React.useState('');
   const [location, setLocation] = React.useState('');
   const [fileObj, setFileObj] = React.useState({
-    uri: 'file:/data/placeholder.jpg',
-    name: 'placholder.jpg',
+    uri: 'https://clinicaesperanza.org/wp-content/uploads/2019/09/profile-placeholder.png',
+    name: 'userProfile.jpg',
     type: 'image/jpg',
   });
 
@@ -96,13 +95,16 @@ function CreateEventForm({ navigation }) {
     })
       .then(result => {
         console.log(result)
-        setFileObj(result)
+        setFileObj({...fileObj, uri: result.uri})
       })
       .catch(_ => {
         setFileObj(fileObj)
       })
   }
   function submitForm() {
+    dispatch({
+      type: "CLEAR_SUBMIT_EVENT_ERROR"
+    })
     const body = {
       name,
       category: radio,
@@ -130,7 +132,7 @@ function CreateEventForm({ navigation }) {
       style={{flexDirection: 'row'}}
     >
       {
-        categories.map((item, i) => <Radio key={i} >{ item }</Radio>)
+        categories.map((item, i) => <Radio key={i} status={submitEventError.category ? 'danger' : '' }>{ item }</Radio>)
       }
     </RadioGroup>
   )
@@ -141,10 +143,15 @@ function CreateEventForm({ navigation }) {
         <Text>Pick a Category</Text>
         <Text>{ radio }</Text>
         { radioGroup }
+        <Layout>
+        <Text style={{fontSize:12}} status={ submitEventError.category ? 'danger' : '' }>{ submitEventError.category || '' }</Text>
+        </Layout>
         <Input
           placeholder={ radio + ' Event Name'}
           value={ name }
           onChangeText={ setName }
+          caption={ submitEventError.name || 'Error placeholder (empty for future)' }
+          status={ submitEventError.name ? 'danger' : '' }
         />
         <Input
           placeholder='Description'
@@ -152,11 +159,15 @@ function CreateEventForm({ navigation }) {
           multiline={true}
           value={ description }
           onChangeText={ setDescription }
+          caption={ submitEventError.description || 'Error placeholder' }
+          status={ submitEventError.description ? 'danger' : '' }
         />
         <Input
           placeholder='Max antendees?'
           value={ maxAttendees }
           onChangeText={ setMaxAttendees }
+          caption={ submitEventError.maxAttendees || 'Error placeholder' }
+          status={ submitEventError.maxAttendees ? 'danger' : '' }
         />
         <Input
           disabled={true}
@@ -172,17 +183,19 @@ function CreateEventForm({ navigation }) {
           value={ location }
           onChangeText={ setLocation }
         />
+        <Input
+          placeholder='Date and Time'
+          onFocus={() => setDatePicker(true)}
+          value={ date.toISOString() }
+          caption={ submitEventError.datetime || 'Error placeholder' }
+          status={ submitEventError.datetime ? 'danger' : '' }
+        />
         <Button
           onPressOut={() => setDatePicker(true)}
         >
           Pickadate
         </Button>
-        <Input
-          placeholder='Date and Time'
-          onFocus={() => setDatePicker(true)}
-          value={ date.toISOString() }
-          disabled
-        />
+        <Divider />
         <DateTimePickerModal
           minimumDate={new Date()}
           isVisible={datePicker}

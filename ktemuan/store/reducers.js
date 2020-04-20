@@ -158,6 +158,13 @@ const initialState = {
     postEvent: 'create', // ['create', 'success']
     postLoading: false
   },
+  submitEventError: {
+    datetime: null,
+    name: null,
+    category: null,
+    description: null,
+    maxAttendees: null
+  },
   atendees: [],
   category: 'All',
   categories: ['All', 'Game', 'Study', 'Bussiness', 'Meetup'],
@@ -181,6 +188,31 @@ const initialState = {
 function reducers(state = initialState, actions) {
   const { type, payload } = actions;
   switch(type) {
+    case "CLEAR_SUBMIT_EVENT_ERROR": {
+      return {
+        ...state,
+        submitEventError: {
+          datetime: null,
+          name: null,
+          category: null,
+          description: null,
+          maxAttendees: null
+        }
+      }
+    }
+    case "SET_SUBMIT_EVENT_ERROR": {
+      return {
+        ...state,
+        submitEventError: {
+          ...state.submitEventError,
+          datetime: payload.datetime || null,
+          name: payload.name || null,
+          category: payload.category || null,
+          description: payload.description || null,
+          maxAttendees: payload.maxAttendees || null,
+        }
+      }
+    }
     case "TOGGLE_SUBMIT_EVENT_LOADING": {
       if (!payload) {
         return {
