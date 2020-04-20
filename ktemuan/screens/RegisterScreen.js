@@ -11,8 +11,8 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 
 function RegisterScreen({ navigation }) {
   const dispatch = useDispatch();
-  const needLogin = useSelector(state => state.needLogin);
-  const registerError = useSelector(state => state.registerError);
+  const needLogin = useSelector(state => state.reducer.needLogin);
+  const registerError = useSelector(state => state.reducer.registerError);
 
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');

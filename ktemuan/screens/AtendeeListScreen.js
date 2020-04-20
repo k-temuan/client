@@ -8,7 +8,7 @@ function AtendeeListScreen({ navigation, route }) {
   const { eventId } = route.params;
   const dispatch = useDispatch();
   dispatch(FETCH_EVENT_ATENDEES());
-  const atendees = useSelector(state => state.atendees);
+  const atendees = useSelector(state => state.reducer.atendees);
   let atendeeList = <></>
   if (atendees) {
     atendeeList = atendees.map(item => (
