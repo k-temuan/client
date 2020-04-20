@@ -9,7 +9,7 @@ const placeholder = 'https://user-images.githubusercontent.com/194400/49531010-4
 
 function DetailsScreen({ navigation, route }) {
   const dispatch = useDispatch()
-  const event = useSelector(state => state.event);
+  const event = useSelector(state => state.reducer.event);
   const { id } = route.params;
 
   dispatch(FETCH_EVENT_DETAIL(id))

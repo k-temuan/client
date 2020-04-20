@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-import { SERVER_URL } from 'react-native-dotenv';
+// import { SERVER_URL } from 'react-native-dotenv';
 
-const apiURL = 'http://192.168.43.189:3000';
+const apiURL = 'http://192.168.0.14:3000';
 
 const appStorageKey = 'ktemuan@AsyncStorage';
 
@@ -66,7 +66,7 @@ export const POST_EVENT = (inputObj) => {
 
     let tags = [];
     tags.push(1)
-    tags = JSON.stringify(tags);
+    const strTags = JSON.stringify(tags);
 
     let body = new FormData()
     let newCategory = category.toLowerCase();
@@ -77,7 +77,7 @@ export const POST_EVENT = (inputObj) => {
     body.append("max_attendees", max_attendees);
     body.append("date_time", date_time);
     body.append("location", location);
-    body.append("tags", tags)
+    body.append("tags", strTags)
 
     console.log('send body to post/events');
     console.log(apiURL);

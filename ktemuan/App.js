@@ -14,10 +14,10 @@ import BrowsingStack from './stacks/BrowsingStack';
 import LandingNavigator from './stacks/LandingNavigator';
 import LoadingSplashScreen from './screens/LoadingSplashScreen';
 
-import reducers from './store/reducers';
+import store from './store/reducers/index';
 // import { rootReducers } from './store/reducers/index';
 
-const store = createStore(reducers, applyMiddleware(thunk))
+// const store = createStore(reducers, applyMiddleware(thunk))
 const Stack = createStackNavigator();
 
 export default function App() {

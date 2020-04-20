@@ -16,7 +16,7 @@ const initialState = {
     empty: false,
     error: null,
   },
-  events: [],
+  // events: [],
   events2: [
     { 
       "id": 1,
@@ -428,12 +428,12 @@ function reducers(state = initialState, actions) {
         }
       }
     }
-    case "SET_EVENTS": {
-      return {
-        ...state,
-        events: payload
-      }
-    }
+    // case "SET_EVENTS": {
+    //   return {
+    //     ...state,
+    //     events: payload
+    //   }
+    // }
     case "SET_EVENTS_STATUS": {
       return {
         ...state,

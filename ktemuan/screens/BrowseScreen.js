@@ -18,11 +18,11 @@ const ava_url = 'https://api.adorable.io/avatars/80/lele@goyang.com.png';
 function BrowseScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const userCred = useSelector(state => state.userCred);
-  const events = useSelector(state => state.events);
-  const needLogin = useSelector(state => state.needLogin);
-  const categories = useSelector(state => state.categories);
-  const category = useSelector(state => state.category);
+  const userCred = useSelector(state => state.reducer.userCred);
+  const events = useSelector(state => state.event.events);
+  const needLogin = useSelector(state => state.reducer.needLogin);
+  const categories = useSelector(state => state.reducer.categories);
+  const category = useSelector(state => state.reducer.category);
 
   const [toggleOption, setToggleOption] = React.useState(false);
 
@@ -48,7 +48,7 @@ function BrowseScreen({ navigation }) {
       payload: option
     })
   }
-  const events_status = useSelector(state => state.events_status);
+  const events_status = useSelector(state => state.reducer.events_status);
 
   console.log(events_status);
   console.log(userCred);
