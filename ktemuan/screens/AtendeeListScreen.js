@@ -3,15 +3,20 @@ import { Text, Layout, Avatar, Button } from '@ui-kitten/components';
 import { ScrollView, TouchableHighlight } from 'react-native';
 import { FETCH_EVENT_ATENDEES } from '../store/actions';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { createStackNavigator } from '@react-navigation/stack';
+import AttendeeList from '../components/AttendeeListScreen/AttendeeList'
 function AtendeeListScreen({ navigation, route }) {
   const { eventId } = route.params;
   const dispatch = useDispatch();
-  dispatch(FETCH_EVENT_ATENDEES());
-  const atendees = useSelector(state => state.atendees);
-  let atendeeList = <></>
-  if (atendees) {
-    atendeeList = atendees.map(item => (
+  
+  React.useEffect(() => {
+    dispatch(FETCH_EVENT_ATENDEES(eventId));
+  }, [eventId, dispatch])
+
+  const attendees = useSelector(state => state.attendees.attendees);
+  let attendeeList = <></>
+  if (attendees) {
+    attendeeList = attendees.map(item => (
       <TouchableHighlight key={item.id} onPressOut={() => navigation.navigate('Profile', { userId: item.id })}>
         <Layout style={{flexDirection: 'row', alignItems: 'center', marginBottom: 10, elevation: 2, padding: 5}}>
           <Layout>
@@ -29,13 +34,26 @@ function AtendeeListScreen({ navigation, route }) {
       </TouchableHighlight>
     ))
   }
+  let attendeeContent = <></>
+  // if content successfully loaded
+  attendeeContent = AttendeeList
+  // if error etc
+  // attendeeContent = AttendeeListError
+
+  const Stack = createStackNavigator()
   return (
-    <Layout>
-      <Text>Atendee list to fetch from event ID: { eventId }</Text>
-      <Text>2 page swipe: joined, all invited user?</Text>
-      { atendeeList }
-    </Layout>
+    <Stack.Navigator screenOptions={{headerShown: false}} >
+      <Stack.Screen name="attendeeContent" component={attendeeContent} />
+    </Stack.Navigator>
   )
+  
+  // return (
+  //   <Layout>
+  //     <Text>Atendee list to fetch from event ID: { eventId }</Text>
+  //     <Text>2 page swipe: joined, all invited user?</Text>
+  //     { attendeeList }
+  //   </Layout>
+  // )
 }
 
 export default AtendeeListScreen;

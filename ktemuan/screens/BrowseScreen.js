@@ -4,16 +4,43 @@ import { FlatList, TouchableHighlight, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FETCH_EVENTS } from '../store/actions'
 import { styles } from '../styles';
-import EventListItem from '../components/EventListItem';
+// import EventListItem from '../components/BrowseScreen/EventListItem';
 
-const ava_url = 'https://api.adorable.io/avatars/80/lele@goyang.com.png'
+import { createStackNavigator } from '@react-navigation/stack';
+import EventList from '../components/BrowseScreen/EventList';
+import EmptyItem from '../components/BrowseScreen/EmptyItem';
+import ErrorItem from '../components/BrowseScreen/ErrorItem';
+import LoadingItem from '../components/BrowseScreen/LoadingItem';
+import { NativeViewGestureHandler } from 'react-native-gesture-handler';
+
+const ava_url = 'https://api.adorable.io/avatars/80/lele@goyang.com.png';
 
 function BrowseScreen({ navigation }) {
   const dispatch = useDispatch();
-  const [toggleOption, setToggleOption] = React.useState(false)
+
+  const userCred = useSelector(state => state.landing.userCred);
+  const events = useSelector(state => state.event.events);
+  const needLogin = useSelector(state => state.landing.needLogin);
+  const categories = useSelector(state => state.browse.categories);
+  const category = useSelector(state => state.browse.category);
+  const events_status = useSelector(state => state.browse.events_status);
+
+  const [toggleOption, setToggleOption] = React.useState(false);
+
+  // const testUserCred = {...userCred};
+  // delete testUserCred.access_token;
+
   React.useEffect(() => {
-    // dispatch(FETCH_EVENTS())
-  }, [dispatch])
+    dispatch(FETCH_EVENTS({ userCred: userCred }))
+
+    if (needLogin) {
+      navigation.navigate('Landing');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Landing' }],
+      });
+    }
+  }, [dispatch, needLogin, category])
 
   function handleChosen(option) {
     setToggleOption(!toggleOption)
@@ -23,44 +50,38 @@ function BrowseScreen({ navigation }) {
     })
   }
 
-  const events = useSelector(state => state.events);
-  const screenLoading = useSelector(state => state.screenLoading);
-  const screenError = useSelector(state => state.screenError);
-  const categories = useSelector(state => state.categories);
-  const category = useSelector(state => state.category);
-
-  if (screenLoading) placeholder = <Text category='h2'>Loading...</Text>
-  if (screenError) placeholder = <Text category='h2'>Error...</Text>
-
-  const filteredEvents = events.filter(item => {
-    if (category === 'All') {
-      return item
-    } else {
-      return item.category === category.toLowerCase()
-    }
-  })
-  const eventList = <FlatList
-    data={filteredEvents}
-    renderItem={({ item }) => <EventListItem event={item} navigation={navigation} />}
-    keyExtractor={item => String(item.id)}
-  />
+  // console.log(events_status);
+  // console.log(userCred);
+  
+  let eventListContainer = EventList
+  if (events_status.loading) eventListContainer = LoadingItem
+  else if (events_status.error) eventListContainer = ErrorItem
+  else if (events_status.empty || events.length === 0) eventListContainer = EmptyItem
+  
   const buttonOptions = categories.map((item, i) => <Button key={i} size='medium' onPressOut={() => handleChosen(item)}>{item}</Button>)
+
+  const Stack = createStackNavigator();
 
   return (
     <Layout style={{flex: 1}}>
       {
-        toggleOption ? 
+        toggleOption ?
         <ScrollView horizontal={true} style={{ maxHeight: 50 }}>
           <Layout style={{ flexDirection: 'row'}}>{ buttonOptions }</Layout>
         </ScrollView> :
         <TouchableHighlight onPress={() => setToggleOption(!toggleOption)}>
           <Layout style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text category='h2'>{category} Events</Text>
-            <Button onPressOut={() => navigation.navigate('Create')}>Create Event</Button>
+            <Text category='h2'>{ category } Events</Text>
+            <Button
+              onPressOut={() => navigation.navigate('Create')}
+              disabled={ events_status.loading }
+            >Create Event</Button>
           </Layout>
         </TouchableHighlight>
       }
-      { eventList }
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Content" component={ eventListContainer } />
+      </Stack.Navigator>
     </Layout>
   )
 }

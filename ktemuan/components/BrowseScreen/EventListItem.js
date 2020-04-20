@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Avatar, Text, Card, Button } from '@ui-kitten/components';
-import { styles } from '../styles';
+import { styles } from '../../styles';
 import { TouchableHighlight } from 'react-native';
 
 const ava_url = 'https://api.adorable.io/avatars/80/lele@goyang.com.png'
@@ -11,7 +11,7 @@ function EventListItem({ navigation, event }) {
       key={event.id}
       style={[{ minHeight: 65, margin: 5, borderLeftWidth: 10, borderBottomWidth: 10, borderRadius: 0, elevation: 10 }, styles.card[event.category ]] }
       appearance='filled'
-      onPress={() => navigation.push('Details', { id: event.id })}
+      onPress={() => navigation.push('Details', { id: event.id, cachedEvent: event })}
     >
       <Layout style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Layout style={{flex: 1, flexDirection:'column', justifyContent: 'flex-start', alignItems: 'center'}} >
