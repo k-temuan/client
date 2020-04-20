@@ -21,6 +21,8 @@ function BrowseScreen({ navigation }) {
   const userCred = useSelector(state => state.userCred);
   const events = useSelector(state => state.events);
   const needLogin = useSelector(state => state.needLogin);
+  const categories = useSelector(state => state.categories);
+  const category = useSelector(state => state.category);
 
   const [toggleOption, setToggleOption] = React.useState(false);
 
@@ -46,10 +48,10 @@ function BrowseScreen({ navigation }) {
       payload: option
     })
   }
-
-  const categories = useSelector(state => state.categories);
-  const category = useSelector(state => state.category);
   const events_status = useSelector(state => state.events_status);
+
+  console.log(events_status);
+  console.log(userCred);
   
   let eventListContainer = EventList
   if (events_status.loading) eventListContainer = LoadingItem

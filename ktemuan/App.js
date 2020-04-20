@@ -15,6 +15,7 @@ import LandingNavigator from './stacks/LandingNavigator';
 import LoadingSplashScreen from './screens/LoadingSplashScreen';
 
 import reducers from './store/reducers';
+// import { rootReducers } from './store/reducers/index';
 
 const store = createStore(reducers, applyMiddleware(thunk))
 const Stack = createStackNavigator();

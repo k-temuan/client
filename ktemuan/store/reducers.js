@@ -165,6 +165,9 @@ const initialState = {
     description: null,
     maxAttendees: null
   },
+  detail_status: {
+    fetchLoading: false
+  },
   atendees: [],
   category: 'All',
   categories: ['All', 'Game', 'Study', 'Bussiness', 'Meetup'],
@@ -188,6 +191,25 @@ const initialState = {
 function reducers(state = initialState, actions) {
   const { type, payload } = actions;
   switch(type) {
+    case "TOGGLE_FETCH_DETAIL_LOADING": {
+      if (payload) {
+        return {
+          ...state,
+          detail_status: {
+            ...state.detail_status,
+            fetchLoading: payload
+          }
+        }
+      } else {
+        return {
+          ...state,
+          detail_status: {
+            ...state.detail_status,
+            fetchLoading: !state.detail_status.fetchLoading
+          }
+        }
+      }
+    }
     case "CLEAR_SUBMIT_EVENT_ERROR": {
       return {
         ...state,

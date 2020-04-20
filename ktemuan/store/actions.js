@@ -58,6 +58,16 @@ export const POST_EVENT = (inputObj) => {
       userCred
     } = inputObj;
 
+    // tags => comma delimited string = 'another,one,bites,the,dust'
+    // check from tags list in store
+    // if exist, take the id
+    // else, create new tag, tak the id
+    // request to server stringified array of tagId = "[1,2,3,4,5,6]"
+
+    let tags = [];
+    tags.push(1)
+    tags = JSON.stringify(tags);
+
     let body = new FormData()
     let newCategory = category.toLowerCase();
     body.append("image", file);
@@ -67,17 +77,7 @@ export const POST_EVENT = (inputObj) => {
     body.append("max_attendees", max_attendees);
     body.append("date_time", date_time);
     body.append("location", location);
-    body.append("tags", [[]])
-    // body = {
-    //   name,
-    //   newCategory,
-    //   description,
-    //   max_attendees,
-    //   location,
-    //   date_time,
-    //   file,
-    //   fileBuffer
-    // }
+    body.append("tags", tags)
 
     console.log('send body to post/events');
     console.log(apiURL);
@@ -91,8 +91,7 @@ export const POST_EVENT = (inputObj) => {
       url: `${apiURL}/events`,
       method: "POST",
       headers: {
-        access_token: userCred.access_token,
-        'Content-Type': 'multipart/form-data',
+        access_token: userCred.access_token
       },
       data: body,
     })
@@ -103,7 +102,7 @@ export const POST_EVENT = (inputObj) => {
         })
       })
       .catch(err => {
-        // console.log(Object.keys(err))
+        console.log(Object.keys(err))
         if (err.message === 'Network Error') {
           for (let key of Object.keys(err)) {
             console.log(err[key])
@@ -404,6 +403,7 @@ export const FETCH_PROFILE_DETAIL = (userId) => {
 
 export const FETCH_EVENT_DETAIL = (id) => {
   return (dispatch, getState) => {
+    // handle cached events
     const cachedEvent = getState().events
     const event = cachedEvent.filter(item => item.id === id)[0]
     dispatch({
@@ -419,6 +419,9 @@ export const FETCH_EVENT_ATENDEES = (eventId) => {
     dispatch({
       type: "SET_ATENDEES",
       payload: cachedAtendees
+    })
+    axios({
+      url: `${apiURL}/events/${eventId}`
     })
   }
 }
