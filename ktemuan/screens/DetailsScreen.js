@@ -4,15 +4,19 @@ import { ScrollView, Image, TouchableHighlight, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { FETCH_EVENT_DETAIL } from '../store/actions';
 import { styles } from '../styles';
+import { createStackNavigator } from '@react-navigation/stack';
+import DetailItem from '../components/DetailScreen/DetailItem';
 
 const placeholder = 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png';
 
 function DetailsScreen({ navigation, route }) {
   const dispatch = useDispatch()
-  const event = useSelector(state => state.reducer.event);
+  const event = useSelector(state => state.detail.event);
   const { id } = route.params;
 
-  dispatch(FETCH_EVENT_DETAIL(id))
+  React.useEffect(() => {
+    dispatch(FETCH_EVENT_DETAIL(id))
+  }, [dispatch, id])
 
   let atendeeList= <></>
   if (event.users) {
@@ -27,53 +31,61 @@ function DetailsScreen({ navigation, route }) {
       </TouchableHighlight>
     ))
   }
+  const Stack = createStackNavigator()
+  let DetailContent = <></>
+
+  // if detail loaded
+  DetailContent = DetailItem
 
   return (
-    <Layout style={{flex: 1, paddingTop: 5, paddingBottom: 0, paddingHorizontal: 5}}>
-      <ScrollView>
-        <Text>id to fetch: { id }</Text>
-        <Layout style={[{paddingTop: 5, borderTopWidth: 5, borderRightWidth: 5, borderLeftWidth: 5, borderTopRightRadius: 100, borderTopLeftRadius: 10}, styles.card[event.category]]}>
-          <Text category='h2' style={{ paddingLeft: 5 }}>{ event.name }</Text>
-        </Layout>
-        <Layout style={[{padding: 5, borderLeftWidth: 5}, styles.card[event.category]]}>
-          <Text category='h6'>{ event.description }</Text>
-          <ScrollView
-            horizontal={true}
-            style={{minHeight: 100}}
-          >
-            <Image
-              source={{uri: placeholder}}
-              style={{height: 100, width: 150, marginHorizontal: 1}}
-            />
-            <Image
-              source={{uri: placeholder}}
-              style={{height: 100, width: 150, marginHorizontal: 1}}
-            />
-            <Image
-              source={{uri: placeholder}}
-              style={{height: 100, width: 150, marginHorizontal: 1}}
-            />
-            <Image
-              source={{uri: placeholder}}
-              style={{height: 100, width: 150, marginHorizontal: 1}}
-            />
-          </ScrollView>
-          <Text category='h3'>Actions</Text>
-          <Layout>
-            <Button>Join</Button>
-            <Divider/>
-            <Button>unJoin ?</Button>
-          </Layout>
-          <TouchableHighlight onPressOut={() => navigation.navigate('Atendee', { eventId: event.id })}>
-            <Layout style={{flexDirection: 'row', flexWrap: 'wrap', maxHeight: 100}}>
-              <Text category='h3'>Atendees List ></Text>
-              { atendeeList }
-              { atendeeList }
-            </Layout>
-          </TouchableHighlight>
-        </Layout>
-      </ScrollView>
-    </Layout>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="DetailContent" component={ DetailContent } />
+    </Stack.Navigator>
+    // <Layout style={{flex: 1, paddingTop: 5, paddingBottom: 0, paddingHorizontal: 5}}>
+    //   <ScrollView>
+    //     <Text>id to fetch: { id }</Text>
+    //     <Layout style={[{paddingTop: 5, borderTopWidth: 5, borderRightWidth: 5, borderLeftWidth: 5, borderTopRightRadius: 100, borderTopLeftRadius: 10}, styles.card[event.category]]}>
+    //       <Text category='h2' style={{ paddingLeft: 5 }}>{ event.name }</Text>
+    //     </Layout>
+    //     <Layout style={[{padding: 5, borderLeftWidth: 5}, styles.card[event.category]]}>
+    //       <Text category='h6'>{ event.description }</Text>
+    //       <ScrollView
+    //         horizontal={true}
+    //         style={{minHeight: 100}}
+    //       >
+    //         <Image
+    //           source={{uri: placeholder}}
+    //           style={{height: 100, width: 150, marginHorizontal: 1}}
+    //         />
+    //         <Image
+    //           source={{uri: placeholder}}
+    //           style={{height: 100, width: 150, marginHorizontal: 1}}
+    //         />
+    //         <Image
+    //           source={{uri: placeholder}}
+    //           style={{height: 100, width: 150, marginHorizontal: 1}}
+    //         />
+    //         <Image
+    //           source={{uri: placeholder}}
+    //           style={{height: 100, width: 150, marginHorizontal: 1}}
+    //         />
+    //       </ScrollView>
+    //       <Text category='h3'>Actions</Text>
+    //       <Layout>
+    //         <Button>Join</Button>
+    //         <Divider/>
+    //         <Button>unJoin ?</Button>
+    //       </Layout>
+    //       <TouchableHighlight onPressOut={() => navigation.navigate('Atendee', { eventId: event.id })}>
+    //         <Layout style={{flexDirection: 'row', flexWrap: 'wrap', maxHeight: 100}}>
+    //           <Text category='h3'>Atendees List ></Text>
+    //           { atendeeList }
+    //           { atendeeList }
+    //         </Layout>
+    //       </TouchableHighlight>
+    //     </Layout>
+    //   </ScrollView>
+    // </Layout>
   )
 }
 

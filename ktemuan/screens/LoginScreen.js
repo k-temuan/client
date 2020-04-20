@@ -6,9 +6,9 @@ import { POST_LOGIN } from '../store/actions';
 
 function LoginScreen({ navigation, route }) {
   const dispatch = useDispatch();
-  const needLogin = useSelector(state => state.reducer.needLogin);
-  const loginError = useSelector(state => state.reducer.loginError);
-  const loginLoading = useSelector(state => state.reducer.loginLoading);
+  const needLogin = useSelector(state => state.landing.needLogin);
+  const loginError = useSelector(state => state.landing.loginError);
+  const loginLoading = useSelector(state => state.landing.loginLoading);
   
   const [email, setEmail] = React.useState('lele@yeye.com');
   const [password, setPassword] = React.useState('leleyeye');

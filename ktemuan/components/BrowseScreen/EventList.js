@@ -6,7 +6,7 @@ import { Button, Layout, Text } from '@ui-kitten/components';
 
 function EventList({ navigation }) {
   const events = useSelector(state => state.event.events);
-  const category = useSelector(state => state.reducer.category);
+  const category = useSelector(state => state.browse.category);
 
   const filteredEvents = events.filter(item => {
     if (category === 'All') {

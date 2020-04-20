@@ -2,7 +2,7 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 // import { SERVER_URL } from 'react-native-dotenv';
 
-const apiURL = 'http://192.168.0.14:3000';
+const apiURL = 'http://192.168.43.189:3000';
 
 const appStorageKey = 'ktemuan@AsyncStorage';
 
@@ -398,13 +398,18 @@ export const FETCH_EVENTS = ({ userCred }) => {
 
 export const FETCH_PROFILE_DETAIL = (userId) => {
   return (dispatch, getState) => {
+    dispatch({
+      type: "SET_PROFILE",
+      payload: { id: userId }
+    })
   }
 }
 
 export const FETCH_EVENT_DETAIL = (id) => {
   return (dispatch, getState) => {
     // handle cached events
-    const cachedEvent = getState().events
+    // console.log(getState())
+    const cachedEvent = getState().event.events
     const event = cachedEvent.filter(item => item.id === id)[0]
     dispatch({
       type: "SET_EVENT",
@@ -415,13 +420,13 @@ export const FETCH_EVENT_DETAIL = (id) => {
 
 export const FETCH_EVENT_ATENDEES = (eventId) => {
   return (dispatch, getState) => {
-    const cachedAtendees = getState().event.users;
+    const cachedAtendees = getState().detail.event.users || [];
     dispatch({
       type: "SET_ATENDEES",
       payload: cachedAtendees
     })
-    axios({
-      url: `${apiURL}/events/${eventId}`
-    })
+    // axios({
+    //   url: `${apiURL}/events/${eventId}`
+    // })
   }
 }

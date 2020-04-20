@@ -191,255 +191,255 @@ const initialState = {
 function reducers(state = initialState, actions) {
   const { type, payload } = actions;
   switch(type) {
-    case "TOGGLE_FETCH_DETAIL_LOADING": {
-      if (payload) {
-        return {
-          ...state,
-          detail_status: {
-            ...state.detail_status,
-            fetchLoading: payload
-          }
-        }
-      } else {
-        return {
-          ...state,
-          detail_status: {
-            ...state.detail_status,
-            fetchLoading: !state.detail_status.fetchLoading
-          }
-        }
-      }
-    }
-    case "CLEAR_SUBMIT_EVENT_ERROR": {
-      return {
-        ...state,
-        submitEventError: {
-          datetime: null,
-          name: null,
-          category: null,
-          description: null,
-          maxAttendees: null
-        }
-      }
-    }
-    case "SET_SUBMIT_EVENT_ERROR": {
-      return {
-        ...state,
-        submitEventError: {
-          ...state.submitEventError,
-          datetime: payload.datetime || null,
-          name: payload.name || null,
-          category: payload.category || null,
-          description: payload.description || null,
-          maxAttendees: payload.maxAttendees || null,
-        }
-      }
-    }
-    case "TOGGLE_SUBMIT_EVENT_LOADING": {
-      if (!payload) {
-        return {
-          ...state,
-          event_status: {
-            ...state.event_status,
-            postLoading: !state.event_status.postLoading
-          }
-        }
-      } else {
-        return {
-          ...state,
-          event_status: {
-            ...state.event_status,
-            postLoading: payload
-          }
-        }
-      }
-    }
-    case "TOGGLE_SUBMIT_EVENT_SUCCESS": {
-      return {
-        ...state,
-        event_status: {
-          ...state.event_status,
-          postEvent: 'success'
-        }
-      }
-    }
-    case "TOGGLE_SUBMIT_EVENT": {
-      return {
-        ...state,
-        event_status: {
-          ...state.event_status,
-          postEvent: 'create'
-        }
-      }
-    }
-    case "TOGGLE_LOGIN_LOADING": {
-      if (payload) {
-        return {
-          ...state,
-          loginLoading: payload
-        }
-      } else {
-        return {
-          ...state,
-          loginLoading: !state.loginLoading
-        }
-      }
-    }
-    case "CLEAR_LOGIN_ERROR": {
-      return {
-        ...state,
-        loginError: {
-          email: null,
-          password: null,
-          message: null
-        }
-      }
-    }
-    case "SET_LOGIN_ERROR": {
-      return {
-        ...state,
-        loginError: {
-          ...state.loginError,
-          email: payload.email || null,
-          password: payload.password || null,
-          message: payload.message || null
-        }
-      }
-    }
-    case "TOGGLE_REGISTER_LOADING": {
-      if (payload) {
-        return {
-          ...state,
-          registerLoading: payload
-        }
-      } else {
-        return {
-          ...state,
-          registerLoading: !state.registerLoading
-        }
-      }
-    }
-    case "SET_REGISTER_ERROR": {
-      return {
-        ...state,
-        registerError: {
-          firstname: payload.firstname,
-          lastname: payload.lastname,
-          email: payload.email,
-          photo_url: payload.photo_url,
-          password: payload.password
-        }
-      }
-    }
-    case "CLEAR_REGISTER_ERROR": {
-      return {
-        ...state,
-        registerError: {
-          firstname: null,
-          lastname: null,
-          email: null,
-          photo_url: null,
-          passowrd: null
-        }
-      }
-    }
-    case "CLEAR_USER_CRED": {
-      return {
-        ...state,
-        userCred: {
-          id: null,
-          firstname: null,
-          lastname: null,
-          email: null,
-          photo_url: null,
-          access_token: null
-        }
-      }
-    }
-    case "SET_USER_CRED": {
-      return {
-        ...state,
-        userCred: {
-          ...state.userCred,
-          id: payload.id,
-          firstname: payload.name,
-          lastname: payload.lastname,
-          email: payload.email,
-          photo_url: payload.photo_url,
-          access_token: payload.access_token
-        }
-      }
-    }
-    case "TOGGLE_NEED_LOGIN": {
-      if (payload !== true && payload !== false) {
-        return {
-          ...state,
-          needLogin: !state.needLogin
-        }
-      }
-      return {
-        ...state,
-        needLogin: payload
-      }
-    }
-    case "SET_PROFILE": {
-      if (payload) {
-        return {
-          ...state,
-          profile: payload
-        }
-      }
-      return {
-        ...state
-      }
-    }
-    case "SET_ATENDEES": {
-      if (payload) {
-        return {
-          ...state,
-          atendees: payload
-        }
-      }
-      return {
-        ...state
-      }
-    }
-    case "SET_EVENT": {
-      if (payload) {
-        return {
-          ...state,
-          event: payload
-        }
-      } else {
-        return {
-          ...state
-        }
-      }
-    }
-    case "SET_CATEGORY": {
-      if (state.categories.includes(payload)) {
-        return {
-          ...state,
-          category: payload
-        }
-      } else {
-        return {
-          ...state
-        }
-      }
-    }
+    // case "TOGGLE_FETCH_DETAIL_LOADING": {
+    //   if (payload) {
+    //     return {
+    //       ...state,
+    //       detail_status: {
+    //         ...state.detail_status,
+    //         fetchLoading: payload
+    //       }
+    //     }
+    //   } else {
+    //     return {
+    //       ...state,
+    //       detail_status: {
+    //         ...state.detail_status,
+    //         fetchLoading: !state.detail_status.fetchLoading
+    //       }
+    //     }
+    //   }
+    // }
+    // case "CLEAR_SUBMIT_EVENT_ERROR": {
+    //   return {
+    //     ...state,
+    //     submitEventError: {
+    //       datetime: null,
+    //       name: null,
+    //       category: null,
+    //       description: null,
+    //       maxAttendees: null
+    //     }
+    //   }
+    // }
+    // case "SET_SUBMIT_EVENT_ERROR": {
+    //   return {
+    //     ...state,
+    //     submitEventError: {
+    //       ...state.submitEventError,
+    //       datetime: payload.datetime || null,
+    //       name: payload.name || null,
+    //       category: payload.category || null,
+    //       description: payload.description || null,
+    //       maxAttendees: payload.maxAttendees || null,
+    //     }
+    //   }
+    // }
+    // case "TOGGLE_SUBMIT_EVENT_LOADING": {
+    //   if (!payload) {
+    //     return {
+    //       ...state,
+    //       event_status: {
+    //         ...state.event_status,
+    //         postLoading: !state.event_status.postLoading
+    //       }
+    //     }
+    //   } else {
+    //     return {
+    //       ...state,
+    //       event_status: {
+    //         ...state.event_status,
+    //         postLoading: payload
+    //       }
+    //     }
+    //   }
+    // }
+    // case "TOGGLE_SUBMIT_EVENT_SUCCESS": {
+    //   return {
+    //     ...state,
+    //     event_status: {
+    //       ...state.event_status,
+    //       postEvent: 'success'
+    //     }
+    //   }
+    // }
+    // case "TOGGLE_SUBMIT_EVENT": {
+    //   return {
+    //     ...state,
+    //     event_status: {
+    //       ...state.event_status,
+    //       postEvent: 'create'
+    //     }
+    //   }
+    // }
+    // case "TOGGLE_LOGIN_LOADING": {
+    //   if (payload) {
+    //     return {
+    //       ...state,
+    //       loginLoading: payload
+    //     }
+    //   } else {
+    //     return {
+    //       ...state,
+    //       loginLoading: !state.loginLoading
+    //     }
+    //   }
+    // }
+    // case "CLEAR_LOGIN_ERROR": {
+    //   return {
+    //     ...state,
+    //     loginError: {
+    //       email: null,
+    //       password: null,
+    //       message: null
+    //     }
+    //   }
+    // }
+    // case "SET_LOGIN_ERROR": {
+    //   return {
+    //     ...state,
+    //     loginError: {
+    //       ...state.loginError,
+    //       email: payload.email || null,
+    //       password: payload.password || null,
+    //       message: payload.message || null
+    //     }
+    //   }
+    // }
+    // case "TOGGLE_REGISTER_LOADING": {
+    //   if (payload) {
+    //     return {
+    //       ...state,
+    //       registerLoading: payload
+    //     }
+    //   } else {
+    //     return {
+    //       ...state,
+    //       registerLoading: !state.registerLoading
+    //     }
+    //   }
+    // }
+    // case "SET_REGISTER_ERROR": {
+    //   return {
+    //     ...state,
+    //     registerError: {
+    //       firstname: payload.firstname,
+    //       lastname: payload.lastname,
+    //       email: payload.email,
+    //       photo_url: payload.photo_url,
+    //       password: payload.password
+    //     }
+    //   }
+    // }
+    // case "CLEAR_REGISTER_ERROR": {
+    //   return {
+    //     ...state,
+    //     registerError: {
+    //       firstname: null,
+    //       lastname: null,
+    //       email: null,
+    //       photo_url: null,
+    //       passowrd: null
+    //     }
+    //   }
+    // }
+    // case "CLEAR_USER_CRED": {
+    //   return {
+    //     ...state,
+    //     userCred: {
+    //       id: null,
+    //       firstname: null,
+    //       lastname: null,
+    //       email: null,
+    //       photo_url: null,
+    //       access_token: null
+    //     }
+    //   }
+    // }
+    // case "SET_USER_CRED": {
+    //   return {
+    //     ...state,
+    //     userCred: {
+    //       ...state.userCred,
+    //       id: payload.id,
+    //       firstname: payload.name,
+    //       lastname: payload.lastname,
+    //       email: payload.email,
+    //       photo_url: payload.photo_url,
+    //       access_token: payload.access_token
+    //     }
+    //   }
+    // }
+    // case "TOGGLE_NEED_LOGIN": {
+    //   if (payload !== true && payload !== false) {
+    //     return {
+    //       ...state,
+    //       needLogin: !state.needLogin
+    //     }
+    //   }
+    //   return {
+    //     ...state,
+    //     needLogin: payload
+    //   }
+    // }
+    // case "SET_PROFILE": {
+    //   if (payload) {
+    //     return {
+    //       ...state,
+    //       profile: payload
+    //     }
+    //   }
+    //   return {
+    //     ...state
+    //   }
+    // }
+    // case "SET_ATENDEES": {
+    //   if (payload) {
+    //     return {
+    //       ...state,
+    //       atendees: payload
+    //     }
+    //   }
+    //   return {
+    //     ...state
+    //   }
+    // }
+    // case "SET_EVENT": {
+    //   if (payload) {
+    //     return {
+    //       ...state,
+    //       event: payload
+    //     }
+    //   } else {
+    //     return {
+    //       ...state
+    //     }
+    //   }
+    // }
+    // case "SET_CATEGORY": {
+    //   if (state.categories.includes(payload)) {
+    //     return {
+    //       ...state,
+    //       category: payload
+    //     }
+    //   } else {
+    //     return {
+    //       ...state
+    //     }
+    //   }
+    // }
     // case "SET_EVENTS": {
     //   return {
     //     ...state,
     //     events: payload
     //   }
     // }
-    case "SET_EVENTS_STATUS": {
-      return {
-        ...state,
-        events_status: payload
-      }
-    }
+    // case "SET_EVENTS_STATUS": {
+    //   return {
+    //     ...state,
+    //     events_status: payload
+    //   }
+    // }
     case "SET_SCREEN_ERROR": {
       return {
         ...state,

@@ -12,9 +12,9 @@ import { POST_EVENT } from '../store/actions';
 function CreateEventForm({ navigation }) {
   const dispatch = useDispatch();
 
-  const userCred = useSelector(state => state.reducer.userCred);
-  const event_status = useSelector(state => state.reducer.event_status);
-  const submitEventError = useSelector(state => state.reducer.submitEventError);
+  const userCred = useSelector(state => state.landing.userCred);
+  const event_status = useSelector(state => state.create.event_status);
+  const submitEventError = useSelector(state => state.create.submitEventError);
 
   React.useEffect(() => {
     // TOGGLE_SUBMIT_EVENT_SUCCESS

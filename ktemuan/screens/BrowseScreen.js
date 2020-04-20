@@ -18,11 +18,12 @@ const ava_url = 'https://api.adorable.io/avatars/80/lele@goyang.com.png';
 function BrowseScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  const userCred = useSelector(state => state.reducer.userCred);
+  const userCred = useSelector(state => state.landing.userCred);
   const events = useSelector(state => state.event.events);
-  const needLogin = useSelector(state => state.reducer.needLogin);
-  const categories = useSelector(state => state.reducer.categories);
-  const category = useSelector(state => state.reducer.category);
+  const needLogin = useSelector(state => state.landing.needLogin);
+  const categories = useSelector(state => state.browse.categories);
+  const category = useSelector(state => state.browse.category);
+  const events_status = useSelector(state => state.browse.events_status);
 
   const [toggleOption, setToggleOption] = React.useState(false);
 
@@ -39,7 +40,7 @@ function BrowseScreen({ navigation }) {
         routes: [{ name: 'Landing' }],
       });
     }
-  }, [dispatch, needLogin])
+  }, [dispatch, needLogin, category])
 
   function handleChosen(option) {
     setToggleOption(!toggleOption)
@@ -48,10 +49,9 @@ function BrowseScreen({ navigation }) {
       payload: option
     })
   }
-  const events_status = useSelector(state => state.reducer.events_status);
 
-  console.log(events_status);
-  console.log(userCred);
+  // console.log(events_status);
+  // console.log(userCred);
   
   let eventListContainer = EventList
   if (events_status.loading) eventListContainer = LoadingItem
