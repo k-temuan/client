@@ -1,9 +1,10 @@
 import React from 'react';
-import { Layout, Text, Divider, Button } from '@ui-kitten/components';
+import { Layout, Text, Divider, Button, Avatar } from '@ui-kitten/components';
 import { ScrollView, TouchableHighlight, Image } from 'react-native';
 import { styles } from '../../styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { apiURL } from '../../store/action/index';
+import { JOIN_EVENT_FROM_DETAIL } from '../../store/action/attendeeAction';
 
 const placeholder = 'https://user-images.githubusercontent.com/194400/49531010-48dad180-f8b1-11e8-8d89-1e61320e1d82.png';
 
@@ -22,7 +23,7 @@ function DetailItem({ navigation }) {
         <Layout style={{elevation: 5, borderRadius: 20}}>
           <Avatar 
             size='medium' 
-            source={{ uri: `${ apiURL + '/' + item.User.photo_url || `https://api.adorable.io/avatars/125/${item.User.email}.png` }` }}
+            source={{ uri: `https://api.adorable.io/avatars/125/${item.User.email}.png` }}
           />
         </Layout>
       </TouchableHighlight>
@@ -89,7 +90,7 @@ function DetailItem({ navigation }) {
         <Layout style={{display: attendedActionStyle}}>
           <Text category='h5'>Non owner Action</Text>
           <Layout style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-            <Button size='small'>Join Event</Button>
+            <Button size='small' onPressOut={() => { dispatch(JOIN_EVENT_FROM_DETAIL(event.id))}}>Join Event</Button>
             <Button size='small'>Remove from Join</Button>
           </Layout>
           <Layout style={{display: ownerActionStyle}}>

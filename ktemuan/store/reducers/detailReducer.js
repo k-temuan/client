@@ -5,11 +5,38 @@ const initialState = {
     emptyDetail: false,
     errorDetail: null,
   },
+  joinLoading: false,
+  joinError: null
 }
 
 function detailReducer(state = initialState, actions) {
   const { type, payload } = actions;
   switch(type) {
+    case "SET_JOIN_ERROR": {
+      return {
+        ...state,
+        joinError: payload
+      }
+    }
+    case "CLEAR_JOIN_ERROR": {
+      return {
+        ...state,
+        joinError: null
+      }
+    }
+    case "TOGGLE_JOIN_LOADING": {
+      if (payload === true || payload === false) {
+        return {
+          ...state,
+          joinLoading: payload
+        }
+      } else {
+        return {
+          ...state,
+          joinLoading: !state.joinLoading
+        }
+      }
+    }
     case "SET_FETCH_DETAIL_ERROR": {
       return {
         ...state,
