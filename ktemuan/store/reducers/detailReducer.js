@@ -6,35 +6,35 @@ const initialState = {
     errorDetail: null,
   },
   joinLoading: false,
-  joinError: null
-}
+  joinError: null,
+};
 
 function detailReducer(state = initialState, actions) {
   const { type, payload } = actions;
-  switch(type) {
+  switch (type) {
     case "SET_JOIN_ERROR": {
       return {
         ...state,
-        joinError: payload
-      }
+        joinError: payload,
+      };
     }
     case "CLEAR_JOIN_ERROR": {
       return {
         ...state,
-        joinError: null
-      }
+        joinError: null,
+      };
     }
     case "TOGGLE_JOIN_LOADING": {
       if (payload === true || payload === false) {
         return {
           ...state,
-          joinLoading: payload
-        }
+          joinLoading: payload,
+        };
       } else {
         return {
           ...state,
-          joinLoading: !state.joinLoading
-        }
+          joinLoading: !state.joinLoading,
+        };
       }
     }
     case "SET_FETCH_DETAIL_ERROR": {
@@ -42,18 +42,18 @@ function detailReducer(state = initialState, actions) {
         ...state,
         detail_status: {
           ...state.detail_status,
-          errorDetail: payload.errorDetail || null
-        }
-      }
+          errorDetail: payload.errorDetail || null,
+        },
+      };
     }
     case "CLEAR_FETCH_DETAIL_ERROR": {
       return {
         ...state,
         detail_status: {
           ...state.detail_status,
-          errorDetail: null
-        }
-      }
+          errorDetail: null,
+        },
+      };
     }
     case "TOGGLE_FETCH_DETAIL_LOADING": {
       if (payload.fetchLoading) {
@@ -61,37 +61,37 @@ function detailReducer(state = initialState, actions) {
           ...state,
           detail_status: {
             ...state.detail_status,
-            fetchLoading: payload.fetchLoading
-          }
-        }
+            fetchLoading: payload.fetchLoading,
+          },
+        };
       } else {
         return {
           ...state,
           detail_status: {
             ...state.detail_status,
-            fetchLoading: !state.detail_status.fetchLoading
-          }
-        }
+            fetchLoading: !state.detail_status.fetchLoading,
+          },
+        };
       }
     }
     case "SET_EVENT": {
       if (payload) {
         return {
           ...state,
-          event: payload
-        }
+          event: payload,
+        };
       } else {
         return {
-          ...state
-        }
+          ...state,
+        };
       }
     }
     default: {
       return {
-        ...state
-      }
+        ...state,
+      };
     }
   }
 }
 
-export default detailReducer
+export default detailReducer;
