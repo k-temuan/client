@@ -1,10 +1,10 @@
 import React from 'react';
-import { Layout, Text, Button } from '@ui-kitten/components';
+import { Layout, Text, Button, Divider } from '@ui-kitten/components';
 import { FlatList, TouchableHighlight, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { FETCH_EVENTS } from '../store/actions'
 import { styles } from '../styles';
-// import EventListItem from '../components/BrowseScreen/EventListItem';
+import { LOGOUT } from '../store/action/landingAction';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import EventList from '../components/BrowseScreen/EventList';
@@ -64,6 +64,8 @@ function BrowseScreen({ navigation }) {
 
   return (
     <Layout style={{flex: 1}}>
+      <Button onPressOut={() => {dispatch(LOGOUT())}}>Logout</Button>
+      <Divider />
       {
         toggleOption ?
         <ScrollView horizontal={true} style={{ maxHeight: 50 }}>

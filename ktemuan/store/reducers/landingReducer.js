@@ -128,11 +128,11 @@ function landingReducer(state =  initialState, actions) {
         ...state,
         userCred: {
           ...state.userCred,
-          id: payload.id,
-          firstname: payload.name,
-          lastname: payload.lastname,
-          email: payload.email,
-          photo_url: payload.photo_url,
+          id: payload.user.id,
+          firstname: payload.user.name,
+          lastname: payload.user.lastname,
+          email: payload.user.email,
+          photo_url: payload.user.photo_url,
           access_token: payload.access_token
         }
       }

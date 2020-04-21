@@ -144,6 +144,8 @@ export const CHECK_PERSISTED_CRED = () => {
         // console.log(JSON.parse(result));
         if (result) {
           objCred = JSON.parse(result);
+          console.clear()
+          console.log(objCred);
           // to skip register/login page dev
           // dispatch({
           //   type: "SET_USER_CRED",
