@@ -11,7 +11,6 @@ import {
 import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import MultiSelect from "react-native-multiple-select";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
@@ -189,7 +188,7 @@ function CreateEventForm({ navigation }) {
       getDefaultValue={() => ""}
       query={{
         // available options: https://developers.google.com/places/web-service/autocomplete
-        key: "YOUR_API_KEY",
+        key: "AIzaSyDF0f24ema_HtTZrUCZSo3iG7HIk8Jkd-Q",
         language: "en", // language of the results
         // types: 'establishment' // default: 'geocode'
       }}
