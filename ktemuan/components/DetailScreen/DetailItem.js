@@ -234,7 +234,11 @@ function DetailItem({ navigation }) {
               <Layout
                 style={{ flexDirection: "row", justifyContent: "space-evenly" }}
               >
-                <Button size="small">Update Event</Button>
+                <Button size="small"
+                  onPressOut={() => {
+                    navigation.push('Update', { id: event.id })
+                  }}
+                >Update Event</Button>
                 <Button
                   size="small"
                   onPressOut={() => {
