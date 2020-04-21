@@ -11,7 +11,6 @@ import {
 import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import MultiSelect from "react-native-multiple-select";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
@@ -31,7 +30,7 @@ function CreateEventForm({ navigation }) {
   const dispatch = useDispatch();
 
   const userCred = useSelector((state) => state.landing.userCred);
-  const tags = useSelector((state) => state.tag.tags);
+  // const tags = useSelector((state) => state.tag.tags);
   const event_status = useSelector((state) => state.create.event_status);
   const submitEventError = useSelector(
     (state) => state.create.submitEventError

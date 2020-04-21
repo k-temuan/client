@@ -2,6 +2,19 @@ import axios from 'axios';
 import {apiURL, appStorageKey} from './index';
 import { FETCH_EVENT_DETAIL } from './detailAction';
 
+export const FETCH_ATTENDEES_LIST = (eventId) => {
+  return (dispatch, getState) => {
+    const userCred = getState().landing.userCred;
+    const event = getState().detail.event
+    console.log(event);
+    // event.users
+    dispatch({
+      type: "SET_ATENDEES",
+      payload: event.Attendees
+    })
+  }
+}
+
 export const JOIN_EVENT_FROM_DETAIL = (eventId) => {
   return (dispatch, getState) => {
     const userCred = getState().landing.userCred;
