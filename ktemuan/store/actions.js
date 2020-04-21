@@ -1,36 +1,42 @@
-import axios from 'axios';
-import { AsyncStorage } from 'react-native';
+import axios from "axios";
+import { AsyncStorage } from "react-native";
 // import { SERVER_URL } from 'react-native-dotenv';
 
-const apiURL = 'http://192.168.43.189:3000';
+const apiURL = "http://192.168.0.14:3000";
 
-const appStorageKey = 'ktemuan@AsyncStorage';
+const appStorageKey = "ktemuan@AsyncStorage";
 
 function objErrorFromArrMsg(arrMsg) {
   // generate registerError msg from string error message
-  let result = {}
-  let selector = ['password', 'email', 'firstname', 'lastname']
-  arrMsg.forEach(msg => {
-    selector.forEach(item => {
-      if (msg.toLowerCase().includes(item)) result[item] = msg
-      else result.message = msg
-    })
-  })
-  return result
+  let result = {};
+  let selector = ["password", "email", "firstname", "lastname"];
+  arrMsg.forEach((msg) => {
+    selector.forEach((item) => {
+      if (msg.toLowerCase().includes(item)) result[item] = msg;
+      else result.message = msg;
+    });
+  });
+  return result;
 }
 function submitEventErrorFromArrMsg(arrMsg) {
-  let result = {}
+  let result = {};
   let selector = {
-    keyword: ['date/time', 'event name', 'category', 'event description', 'maximum attendees'],
-    field: ['datetime', 'name', 'category', 'description', 'maxAttendees']
-  }
-  arrMsg.forEach(msg => {
+    keyword: [
+      "date/time",
+      "event name",
+      "category",
+      "event description",
+      "maximum attendees",
+    ],
+    field: ["datetime", "name", "category", "description", "maxAttendees"],
+  };
+  arrMsg.forEach((msg) => {
     selector.keyword.forEach((item, index) => {
-      if (msg.toLowerCase().includes(item)) result[selector.field[index]] = msg
-    })
-  })
-  
-  return result
+      if (msg.toLowerCase().includes(item)) result[selector.field[index]] = msg;
+    });
+  });
+
+  return result;
   // {
   //   "errors": Array [
   //     "You must select date/time in the future",
@@ -55,7 +61,7 @@ export const POST_EVENT = (inputObj) => {
       location,
       date_time,
       file,
-      userCred
+      userCred,
     } = inputObj;
 
     // tags => comma delimited string = 'another,one,bites,the,dust'
@@ -64,11 +70,11 @@ export const POST_EVENT = (inputObj) => {
     // else, create new tag, tak the id
     // request to server stringified array of tagId = "[1,2,3,4,5,6]"
 
-    let tags = [];
-    tags.push(1)
+    let tags = [72];
+    // tags.push(1)
     const strTags = JSON.stringify(tags);
-
-    let body = new FormData()
+    const strLoc = JSON.stringify(location);
+    let body = new FormData();
     let newCategory = category.toLowerCase();
     body.append("image", file);
     body.append("category", newCategory);
@@ -76,75 +82,76 @@ export const POST_EVENT = (inputObj) => {
     body.append("description", description);
     body.append("max_attendees", max_attendees);
     body.append("date_time", date_time);
-    body.append("location", location);
-    body.append("tags", strTags)
+    body.append("location", strLoc);
+    body.append("tags", strTags);
 
-    console.log('send body to post/events');
+    console.log("send body to post/events");
     console.log(apiURL);
     dispatch({
       type: "TOGGLE_SUBMIT_EVENT_LOADING",
-      payload: true
-    })
+      payload: true,
+    });
 
     // axios issue, content-type field on headers are deleted, resulting Network Error
     axios({
       url: `${apiURL}/events`,
       method: "POST",
       headers: {
-        access_token: userCred.access_token
+        access_token: userCred.access_token,
       },
       data: body,
     })
-      .then(res => {
-        console.log(res)
+      .then((res) => {
+        console.log(res);
         dispatch({
-          type: "TOGGLE_SUBMIT_EVENT_SUCCESS"
-        })
+          type: "TOGGLE_SUBMIT_EVENT_SUCCESS",
+        });
       })
-      .catch(err => {
-        console.log(Object.keys(err))
-        if (err.message === 'Network Error') {
+      .catch((err) => {
+        console.log(Object.keys(err));
+        if (err.message === "Network Error") {
           for (let key of Object.keys(err)) {
-            console.log(err[key])
+            console.log(err[key]);
           }
         } else if (err.response) {
-          console.log(err.response.data.errors)
-          let objError = submitEventErrorFromArrMsg(err.response.data.errors || []);
+          console.log(err.response.data.errors);
+          let objError = submitEventErrorFromArrMsg(
+            err.response.data.errors || []
+          );
           dispatch({
             type: "SET_SUBMIT_EVENT_ERROR",
-            payload: objError
-          })
+            payload: objError,
+          });
         } else {
-          console.log(err)
+          console.log(err);
         }
-        console.log('error?')
-        console.log(err)
+        console.log("error?");
+        console.log(err);
         dispatch({
-          type: "TOGGLE_SUBMIT_EVENT"
-        })
+          type: "TOGGLE_SUBMIT_EVENT",
+        });
       })
-      .finally(_ => {
+      .finally((_) => {
         // navigate to browsing
         // if success toggle submit event success
-        console.log("finished?")
+        console.log("finished?");
         dispatch({
           type: "TOGGLE_SUBMIT_EVENT_LOADING",
-          payload: false
-        })
-      })
-    
-  }
-}
+          payload: false,
+        });
+      });
+  };
+};
 
 export const CHECK_PERSISTED_CRED = () => {
   return (dispatch) => {
-    let objCred = {}
+    let objCred = {};
     AsyncStorage.getItem(appStorageKey)
-      .then(result => {
+      .then((result) => {
         // console.log(JSON.parse(result));
         if (result) {
           objCred = JSON.parse(result);
-          console.clear()
+          console.clear();
           console.log(objCred);
           // to skip register/login page dev
           // dispatch({
@@ -161,175 +168,175 @@ export const CHECK_PERSISTED_CRED = () => {
           if (objCred.access_token) {
             return axios({
               url: `${apiURL}/events/1`,
-              method: 'GET',
+              method: "GET",
               headers: {
-                access_token: objCred.access_token
-              }
-            })
+                access_token: objCred.access_token,
+              },
+            });
           } else {
-            throw new Error('NO_PERSISTED_TOKEN')
+            throw new Error("NO_PERSISTED_TOKEN");
           }
         } else {
-          throw new Error('NO_PERSISTED_CRED')
+          throw new Error("NO_PERSISTED_CRED");
         }
       })
-      .then(_ => {
+      .then((_) => {
         dispatch({
           type: "SET_USER_CRED",
-          payload: objCred
-        })
+          payload: objCred,
+        });
         dispatch({
           type: "TOGGLE_NEED_LOGIN",
-          payload: false
-        })
+          payload: false,
+        });
       })
-      .catch(err => {
+      .catch((err) => {
         // if (err.response) console.log(err.response);
         if (err.response) {
           if (err.response.status === 404) {
             dispatch({
               type: "SET_USER_CRED",
-              payload: objCred
-            })
+              payload: objCred,
+            });
             dispatch({
               type: "TOGGLE_NEED_LOGIN",
-              payload: false
-            })
+              payload: false,
+            });
           } else {
             dispatch({
-              type: "CLEAR_USER_CRED"
-            })
+              type: "CLEAR_USER_CRED",
+            });
             dispatch({
               type: "TOGGLE_NEED_LOGIN",
-              payload: true
-            })
+              payload: true,
+            });
           }
         } else {
           dispatch({
-            type: "CLEAR_USER_CRED"
-          })
+            type: "CLEAR_USER_CRED",
+          });
           dispatch({
             type: "TOGGLE_NEED_LOGIN",
-            payload: true
-          })
+            payload: true,
+          });
         }
-      })
-  }
-}
+      });
+  };
+};
 
 export const SAVE_CRED = (credObj) => {
   return (dispatch) => {
     // currently replacing all parsed data in async storage
     AsyncStorage.setItem(appStorageKey, JSON.stringify(credObj))
-      .then(_ => {
-        console.log(credObj)
+      .then((_) => {
+        console.log(credObj);
         // from axios, save to asyncstorage
         dispatch({
           type: "SET_USER_CRED",
-          payload: credObj
-        })
+          payload: credObj,
+        });
         dispatch({
           type: "TOGGLE_NEED_LOGIN",
-          payload: false
-        })
-        console.log('cred saved to async storage')
+          payload: false,
+        });
+        console.log("cred saved to async storage");
       })
-      .catch(err => {
+      .catch((err) => {
         dispatch({
           type: "SET_TEST_VALUE",
-          payload: err.message
-        })
-      })
-  }
-}
+          payload: err.message,
+        });
+      });
+  };
+};
 
 export const POST_LOGIN = (body) => {
   return (dispatch) => {
     const { email, password } = body;
-    
+
     dispatch({
       type: "TOGGLE_LOGIN_LOADING",
-      payload: true
-    })
+      payload: true,
+    });
 
     //axios resolve usercred
     axios({
       url: `${apiURL}/login`,
-      method: 'POST',
-      data: { email, password }
+      method: "POST",
+      data: { email, password },
     })
       .then(({ data }) => {
-        dispatch(SAVE_CRED(data))
+        dispatch(SAVE_CRED(data));
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.response) {
-          let msg = 'error undefined';
+          let msg = "error undefined";
           if (err.response.data) {
-            msg = err.response.data.errors[0] || 'error undefined'
+            msg = err.response.data.errors[0] || "error undefined";
           }
           dispatch({
             type: "SET_LOGIN_ERROR",
-            payload: { message: msg }
-          })
+            payload: { message: msg },
+          });
         } else {
           dispatch({
             type: "SET_LOGIN_ERROR",
-            payload: { message: err.message }
-          })
+            payload: { message: err.message },
+          });
         }
       })
-      .finally(_ => {
+      .finally((_) => {
         dispatch({
           type: "TOGGLE_LOGIN_LOADING",
-          payload: false
-        })
-      })
-  }
-}
+          payload: false,
+        });
+      });
+  };
+};
 
 export const POST_REGISTER = (body) => {
   return (dispatch) => {
     const { firstname, lastname, email, password, photo_url } = body;
     dispatch({
-      type: 'TOGGLE_REGISTER_LOADING',
-      payload: true
-    })
+      type: "TOGGLE_REGISTER_LOADING",
+      payload: true,
+    });
 
     //axios resolve usercred
     axios({
       url: `${apiURL}/register`,
-      method: 'POST',
-      data: body
+      method: "POST",
+      data: body,
     })
-    .then(({ data }) => {
-      let objCred = {
-        access_token: data.access_token,
-        user: {...data.user}
-      }
-      dispatch(SAVE_CRED(objCred))
-    })
-    .catch(err => {
-      if (err.response) {
-        let objError = objErrorFromArrMsg(err.response.data.errors);
-        dispatch({
-          type: "SET_REGISTER_ERROR",
-          payload: objError
-        })
-      } else {
-        dispatch({
-          type: "SET_REGISTER_ERROR",
-          payload: err.message
-        })
-      }
-    })
-    .finally(_ => {
-      dispatch({
-        type: 'TOGGLE_REGISTER_LOADING',
-        payload: false
+      .then(({ data }) => {
+        let objCred = {
+          access_token: data.access_token,
+          user: { ...data.user },
+        };
+        dispatch(SAVE_CRED(objCred));
       })
-    })
-  }
-}
+      .catch((err) => {
+        if (err.response) {
+          let objError = objErrorFromArrMsg(err.response.data.errors);
+          dispatch({
+            type: "SET_REGISTER_ERROR",
+            payload: objError,
+          });
+        } else {
+          dispatch({
+            type: "SET_REGISTER_ERROR",
+            payload: err.message,
+          });
+        }
+      })
+      .finally((_) => {
+        dispatch({
+          type: "TOGGLE_REGISTER_LOADING",
+          payload: false,
+        });
+      });
+  };
+};
 
 export const FETCH_EVENTS = ({ userCred }) => {
   return (dispatch) => {
@@ -337,98 +344,97 @@ export const FETCH_EVENTS = ({ userCred }) => {
       loading: false,
       empty: false,
       error: null,
-    }
+    };
     dispatch({
       type: "SET_EVENTS_STATUS",
       payload: {
         ...events_status_template,
-        loading: true
-      }
-    })
+        loading: true,
+      },
+    });
     axios({
       url: `${apiURL}/events`,
-      method: 'GET',
+      method: "GET",
       headers: {
-        access_token: userCred.access_token
-      }
+        access_token: userCred.access_token,
+      },
     })
       .then(({ data }) => {
         dispatch({
           type: "SET_EVENTS",
-          payload: data.events
-        })
+          payload: data.events,
+        });
         if (data.length === 0) {
           events_status_template = {
             ...events_status_template,
-            empty: true
-          }
+            empty: true,
+          };
         }
       })
       .catch((err) => {
-        // 
+        //
         if (err.response) {
           for (let key of Object.keys(err)) {
-            console.log(err[key])
+            console.log(err[key]);
           }
           try {
-            console.log(err.response.data.errors)
+            console.log(err.response.data.errors);
             let msg = err.response.data.errors[0];
             events_status_template = {
               ...events_status_template,
-              error: msg
-            }
-          } 
-          catch (error) {
-            console.log(error.message)
+              error: msg,
+            };
+          } catch (error) {
+            console.log(error.message);
             for (let key of Object.keys(error)) {
-              console.log(error[key])
+              console.log(error[key]);
             }
           }
         }
       })
-      .finally(_ => {
+      .finally((_) => {
         dispatch({
           type: "SET_EVENTS_STATUS",
           payload: {
             ...events_status_template,
-            loading: false
-          }
-        })
-      })
-  }
-}
+            loading: false,
+          },
+        });
+      });
+  };
+};
 
 export const FETCH_PROFILE_DETAIL = (userId) => {
   return (dispatch, getState) => {
     dispatch({
       type: "SET_PROFILE",
-      payload: { id: userId }
-    })
-  }
-}
+      payload: { id: userId },
+    });
+  };
+};
 
 export const FETCH_EVENT_DETAIL = (id) => {
   return (dispatch, getState) => {
     // handle cached events
     // console.log(getState())
-    const cachedEvent = getState().event.events
-    const event = cachedEvent.filter(item => item.id === id)[0]
+    const cachedEvent = getState().event.events;
+    const event = cachedEvent.filter((item) => item.id === id)[0];
     dispatch({
       type: "SET_EVENT",
-      payload: event
-    })
-  }
-}
+      payload: event,
+    });
+  };
+};
 
 export const FETCH_EVENT_ATENDEES = (eventId) => {
   return (dispatch, getState) => {
     const cachedAtendees = getState().detail.event.users || [];
     dispatch({
       type: "SET_ATENDEES",
-      payload: cachedAtendees
-    })
+      payload: cachedAtendees,
+    });
     // axios({
     //   url: `${apiURL}/events/${eventId}`
     // })
-  }
-}
+  };
+};
