@@ -1,20 +1,40 @@
 const initialState = {
   event: {},
   detail_status: {
-    fetchLoading: false
+    fetchLoading: false,
+    emptyDetail: false,
+    errorDetail: null,
   },
 }
 
 function detailReducer(state = initialState, actions) {
   const { type, payload } = actions;
   switch(type) {
+    case "SET_FETCH_DETAIL_ERROR": {
+      return {
+        ...state,
+        detail_status: {
+          ...state.detail_status,
+          errorDetail: payload.errorDetail || null
+        }
+      }
+    }
+    case "CLEAR_FETCH_DETAIL_ERROR": {
+      return {
+        ...state,
+        detail_status: {
+          ...state.detail_status,
+          errorDetail: null
+        }
+      }
+    }
     case "TOGGLE_FETCH_DETAIL_LOADING": {
-      if (payload) {
+      if (payload.fetchLoading) {
         return {
           ...state,
           detail_status: {
             ...state.detail_status,
-            fetchLoading: payload
+            fetchLoading: payload.fetchLoading
           }
         }
       } else {

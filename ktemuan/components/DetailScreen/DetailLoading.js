@@ -4,7 +4,7 @@ import { Layout, Text } from '@ui-kitten/components';
 function DetailLoading({ navigation }) {
   return (
     <Layout>
-      <Text>Content</Text>
+      <Text category='h1'>Loading event detail</Text>
     </Layout>
   )
 }
