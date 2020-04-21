@@ -6,10 +6,11 @@ import AttendeeListItem from './AttendeeListItem';
 
 function AttendeeList({ navigation }) {
   const attendees = useSelector(state => state.attendees.attendees);
+  console.log(attendees);
   let attendeeList = <></>
   if (attendees) {
     attendeeList = attendees.map(item => (
-      <AttendeeListItem attendee={item} />
+      <AttendeeListItem navigation={navigation} attendee={item.User} key={item.User.id} />
     ))
   }
 

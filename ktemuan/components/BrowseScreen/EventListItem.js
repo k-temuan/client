@@ -44,7 +44,7 @@ function EventListItem({ navigation, event }) {
           </Layout>
           <Layout style={{flexDirection: 'row'}} >
             <Text>{ event.datetime }</Text>
-            <Text>{ event.location.name }</Text>
+            {/* <Text>{ event.location.name }</Text> */}
           </Layout>
           <Layout style={{flexDirection: 'row'}} >
             <Button size='tiny'>Join</Button>
