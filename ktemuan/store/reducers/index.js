@@ -9,6 +9,7 @@ import browseReducer from "./browseReducer";
 import profileReducer from "./profileReducer";
 import attendeeListReducer from "./attendeeListReducer";
 import tagReducer from "./tagReducer";
+import updateReducer from './updateReducer';
 
 const rootReducers = combineReducers({
   reducer: reducers,
@@ -20,6 +21,7 @@ const rootReducers = combineReducers({
   profile: profileReducer,
   attendees: attendeeListReducer,
   tag: tagReducer,
+  update: updateReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

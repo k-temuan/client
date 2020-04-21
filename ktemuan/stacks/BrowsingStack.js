@@ -6,6 +6,7 @@ import DetailScreen from '../screens/DetailsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import CreateEventForm from '../screens/CreateEventForm';
 import AtendeeListScreen from '../screens/AtendeeListScreen';
+import UpdateEventForm from '../screens/UpdateEventForm';
 
 const Stack = createStackNavigator()
 
@@ -17,6 +18,7 @@ function BrowsingStack() {
       <Stack.Screen name="Profile" component= { ProfileScreen } />
       <Stack.Screen name="Create" component={ CreateEventForm } />
       <Stack.Screen name="Atendee" component={ AtendeeListScreen } />
+      <Stack.Screen name="Update" component={ UpdateEventForm } />
     </Stack.Navigator>
   )
 }
