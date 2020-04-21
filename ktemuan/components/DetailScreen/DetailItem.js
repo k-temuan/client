@@ -23,6 +23,7 @@ function DetailItem({ navigation }) {
   const userCred = useSelector((state) => state.landing.userCred);
   const [isConfirm, setIsConfirm] = React.useState();
   const [isCreator, setIsCreator] = React.useState(false);
+  const [filteredAttendeesList, setfilteredAttendeesList] = React.useState([]);
 
   React.useEffect(() => {
     if (event.Attendees) {
@@ -38,6 +39,8 @@ function DetailItem({ navigation }) {
           setIsConfirm(false);
         }
       }
+      let newList = event.Attendees.filter((el) => el.isConfirm === true);
+      setfilteredAttendeesList(newList);
     }
   }, [event]);
 
@@ -53,28 +56,6 @@ function DetailItem({ navigation }) {
 
   // console.log(event);
   // console.log(event.image_url);
-
-  let atendeeList = <></>;
-  if (event.Attendees) {
-    atendeeList = event.Attendees.map((item) => (
-      <TouchableHighlight
-        key={item.id + "atendee"}
-        style={{ margin: 5 }}
-        onPressOut={() =>
-          navigation.navigate("Profile", { userId: item.User.id })
-        }
-      >
-        <Layout style={{ elevation: 5, borderRadius: 20 }}>
-          <Avatar
-            size="medium"
-            source={{
-              uri: `https://api.adorable.io/avatars/125/${item.User.email}.png`,
-            }}
-          />
-        </Layout>
-      </TouchableHighlight>
-    ));
-  }
 
   let parsedLoc;
   if (event.location) {
@@ -128,6 +109,10 @@ function DetailItem({ navigation }) {
     );
     let pressRemoveJoinFindAttendeeId = pressRemoveJoinFindAttendee[0].id;
     setIsConfirm(false);
+    let removeFromList = filteredAttendeesList.filter(
+      (el) => el.id !== pressRemoveJoinFindAttendeeId
+    );
+    setfilteredAttendeesList(removeFromList);
     dispatch(UNJOIN_EVENT_FROM_DETAIL(pressRemoveJoinFindAttendeeId));
   }
 
@@ -140,6 +125,8 @@ function DetailItem({ navigation }) {
     } else {
       let pressJoinFindAttendeeId = pressJoinFindAttendee[0].id;
       dispatch(REJOIN_EVENT_FROM_DETAIL(pressJoinFindAttendeeId));
+      let addedList = [...filteredAttendeesList, pressJoinFindAttendee[0]];
+      setfilteredAttendeesList(addedList);
     }
     setIsConfirm(true);
   }
@@ -191,12 +178,26 @@ function DetailItem({ navigation }) {
             {!isCreator && (
               <Layout>
                 {isConfirm ? (
-                  <Text category="h6" style={{ textAlign: "center" }}>
-                    You already registered to join this event{"\n"}
+                  <Text
+                    category="h6"
+                    style={{
+                      textAlign: "center",
+                      paddingBottom: 10,
+                      paddingTop: 10,
+                    }}
+                  >
+                    You already registered to join this event
                   </Text>
                 ) : (
-                  <Text category="h6" style={{ textAlign: "center" }}>
-                    Do you want to join this event?{"\n"}
+                  <Text
+                    category="h6"
+                    style={{
+                      textAlign: "center",
+                      paddingBottom: 10,
+                      paddingTop: 10,
+                    }}
+                  >
+                    Do you want to join this event?
                   </Text>
                 )}
               </Layout>
@@ -205,7 +206,6 @@ function DetailItem({ navigation }) {
               <Layout
                 style={{ flexDirection: "row", justifyContent: "space-evenly" }}
               >
-                <Text>{JSON.stringify(isCreator)}</Text>
                 {isConfirm ? (
                   <Button
                     size="small"
@@ -257,7 +257,25 @@ function DetailItem({ navigation }) {
               <Text category="h5" style={{ textAlign: "center" }}>
                 Atendees List >
               </Text>
-              {atendeeList}
+              {filteredAttendeesList.length !== 0 &&
+                filteredAttendeesList.map((item) => (
+                  <TouchableHighlight
+                    key={item.id + "atendee"}
+                    style={{ margin: 5 }}
+                    onPressOut={() =>
+                      navigation.navigate("Profile", { userId: item.User.id })
+                    }
+                  >
+                    <Layout style={{ elevation: 5, borderRadius: 20 }}>
+                      <Avatar
+                        size="medium"
+                        source={{
+                          uri: `https://api.adorable.io/avatars/125/${item.User.email}.png`,
+                        }}
+                      />
+                    </Layout>
+                  </TouchableHighlight>
+                ))}
             </Layout>
           </TouchableHighlight>
           {parsedLoc && (
@@ -268,10 +286,20 @@ function DetailItem({ navigation }) {
                 justifyContent: "center",
               }}
             >
-              <Text category="h5" style={{ textAlign: "center" }}>
+              <Text
+                category="h5"
+                style={{ textAlign: "center", paddingBottom: 5, paddingTop: 5 }}
+              >
                 {parsedLoc.name}
               </Text>
-              <Text style={{ fontSize: 12, textAlign: "center" }}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  textAlign: "center",
+                  paddingBottom: 10,
+                  paddingTop: 5,
+                }}
+              >
                 {parsedLoc.description}
               </Text>
               <MapView
