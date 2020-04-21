@@ -189,7 +189,7 @@ function CreateEventForm({ navigation }) {
       getDefaultValue={() => ""}
       query={{
         // available options: https://developers.google.com/places/web-service/autocomplete
-        key: "AIzaSyAe7P5jcq_A1YnDtVoJyqDdRwVPTfTcLXc",
+        key: "YOUR_API_KEY",
         language: "en", // language of the results
         // types: 'establishment' // default: 'geocode'
       }}
