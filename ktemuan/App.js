@@ -13,6 +13,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import BrowsingStack from './stacks/BrowsingStack';
 import LandingNavigator from './stacks/LandingNavigator';
 import LoadingSplashScreen from './screens/LoadingSplashScreen';
+import DrawerStack from './stacks/DrawerStack';
 
 import store from './store/reducers/index';
 // import { rootReducers } from './store/reducers/index';
@@ -29,7 +30,7 @@ export default function App() {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="LoadingSplash" component={ LoadingSplashScreen } />
             <Stack.Screen name="Landing" component={ LandingNavigator } />
-            <Stack.Screen name="Browsing" component={ BrowsingStack }/>
+            <Stack.Screen name="Browsing" component={ DrawerStack }/>
           </Stack.Navigator>
         </ApplicationProvider>
       </NavigationContainer>

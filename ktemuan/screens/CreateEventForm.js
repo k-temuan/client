@@ -30,7 +30,7 @@ function CreateEventForm({ navigation }) {
   const dispatch = useDispatch();
 
   const userCred = useSelector((state) => state.landing.userCred);
-  const tags = useSelector((state) => state.tag.tags);
+  // const tags = useSelector((state) => state.tag.tags);
   const event_status = useSelector((state) => state.create.event_status);
   const submitEventError = useSelector(
     (state) => state.create.submitEventError
