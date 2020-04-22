@@ -124,6 +124,7 @@ function DetailItem({ navigation }) {
               borderLeftWidth: 5,
               borderTopRightRadius: 10,
               borderTopLeftRadius: 10,
+              alignItems: 'center'
             },
             styles.card[event.category],
           ]}
@@ -147,9 +148,9 @@ function DetailItem({ navigation }) {
             styles.card[event.category],
           ]}
         >
-          <Text category="h6">{event.description}</Text>
+          <Text category="h6" style={{textAlign: 'center'}}>{event.description}</Text>
           {event.category && (
-            <Text style={{ fontWeight: "bold", fontSize: 11 }}>
+            <Text style={{ fontWeight: "bold", fontSize: 16, textAlign: 'center' }}>
               {event.category.charAt(0).toUpperCase() + event.category.slice(1)}{" "}
               Event
             </Text>
@@ -313,7 +314,7 @@ function DetailItem({ navigation }) {
               style={{ flexDirection: "row", flexWrap: "wrap", maxHeight: 100 }}
             >
               <Text category="h5" style={{ textAlign: "center" }}>
-                Atendees List >
+                Attendees List >
               </Text>
               {filteredAttendeesList.length !== 0 &&
                 filteredAttendeesList.map((item) => (
