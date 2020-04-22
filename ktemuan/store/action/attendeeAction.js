@@ -1,6 +1,7 @@
 import axios from "axios";
 import { apiURL, appStorageKey } from "./index";
 import { FETCH_EVENT_DETAIL } from "./detailAction";
+import { FETCH_EVENTS } from '../actions';
 
 export const FETCH_ATTENDEES_LIST = (eventId) => {
   return (dispatch, getState) => {
@@ -38,6 +39,7 @@ export const JOIN_EVENT_FROM_DETAIL = (eventId) => {
       .then(({ data }) => {
         // if success join event, fetch event id?
         dispatch(FETCH_EVENT_DETAIL(eventId));
+        dispatch(FETCH_EVENTS({ userCred: userCred }))
       })
       .catch((err) => {
         // if error join event, show error?
@@ -75,6 +77,7 @@ export const UNJOIN_EVENT_FROM_DETAIL = (attendeeId) => {
       .then(({ data }) => {
         // if success join event, fetch event id?
         dispatch(FETCH_EVENT_DETAIL(eventId));
+        dispatch(FETCH_EVENTS({ userCred: userCred }))
       })
       .catch((err) => {
         // if error join event, show error?
@@ -112,6 +115,7 @@ export const REJOIN_EVENT_FROM_DETAIL = (attendeeId) => {
       .then(({ data }) => {
         // if success join event, fetch event id?
         dispatch(FETCH_EVENT_DETAIL(eventId));
+        dispatch(FETCH_EVENTS({ userCred: userCred }))
       })
       .catch((err) => {
         // if error join event, show error?

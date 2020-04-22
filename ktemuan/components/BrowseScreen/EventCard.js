@@ -1,19 +1,88 @@
 import React from 'react';
 import { TouchableHighlight, ImageBackground } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Layout, Text, Avatar, Button } from '@ui-kitten/components';
 import { styles } from '../../styles';
 import { apiURL } from '../../store/action/index';
 import moment from 'moment';
+import {
+  JOIN_EVENT_FROM_DETAIL,
+  UNJOIN_EVENT_FROM_DETAIL,
+  REJOIN_EVENT_FROM_DETAIL,
+} from "../../store/action/attendeeAction";
 
 function EventCard({ navigation, event }) {
+  const dispatch = useDispatch();
   const userCred = useSelector(state => state.landing.userCred);
+  
+  const [isCreator, setIsCreator] = React.useState(false);
+  const [filteredAttendeesList, setfilteredAttendeesList] = React.useState([]);
+  const [isConfirm, setIsConfirm] = React.useState();
+
   const event_datetime = moment(event.date_time).format('MMMM D YYYY, h:mm a')
   const isOwner = userCred.id === event.User.id
-  const displayOwner = isOwner ? {display: 'flex'} : {display: 'none'};
   const hasJoin = event.Attendees.filter(item => item.User.id === userCred.id).length > 0
-  const diplayJoinStatus = hasJoin ? {display: 'flex'} : {display: 'none'};
+  const displayOwner = isCreator ? {display: 'flex'} : {display: 'none'};
+  const diplayJoinStatus = isConfirm ? {display: 'flex'} : {display: 'none'};
   // console.log(event.Attendees)
+
+  React.useEffect(() => {
+    if (event.Attendees) {
+      let isConfirmCheck = event.Attendees.filter(
+        (el) => el.UserId === userCred.id
+      );
+      if (isConfirmCheck.length === 0) {
+        setIsConfirm(false);
+      } else {
+        if (isConfirmCheck[0].isConfirm === true) {
+          setIsConfirm(true);
+        } else {
+          setIsConfirm(false);
+        }
+      }
+      let newList = event.Attendees.filter((el) => el.isConfirm === true);
+      setfilteredAttendeesList(newList);
+    }
+  }, [event]);
+
+  React.useEffect(() => {
+    if (event.User) {
+      if (userCred.id == event.User.id) {
+        setIsCreator(true);
+      } else {
+        setIsCreator(false);
+      }
+    }
+  }, [event]);
+
+  function pressRemoveJoin() {
+    let pressRemoveJoinFindAttendee = event.Attendees.filter(
+      (el) => el.UserId === userCred.id
+    );
+    let pressRemoveJoinFindAttendeeId = pressRemoveJoinFindAttendee[0].id;
+    setIsConfirm(false);
+    let removeFromList = filteredAttendeesList.filter(
+      (el) => el.id !== pressRemoveJoinFindAttendeeId
+    );
+    setfilteredAttendeesList(removeFromList);
+    dispatch(UNJOIN_EVENT_FROM_DETAIL(pressRemoveJoinFindAttendeeId));
+  }
+
+  function pressJoin() {
+    let pressJoinFindAttendee = event.Attendees.filter(
+      (el) => el.UserId === userCred.id
+    );
+    if (pressJoinFindAttendee.length === 0) {
+      dispatch(JOIN_EVENT_FROM_DETAIL(event.id));
+    } else {
+      let pressJoinFindAttendeeId = pressJoinFindAttendee[0].id;
+      dispatch(REJOIN_EVENT_FROM_DETAIL(pressJoinFindAttendeeId));
+      let addedList = [...filteredAttendeesList, pressJoinFindAttendee[0]];
+      setfilteredAttendeesList(addedList);
+    }
+    setIsConfirm(true);
+  }
+
   return (
     <TouchableHighlight onPressOut={() => { navigation.navigate("Details", {id: event.id})}}>
       <Layout style={[styles.shadow, styles.bg[event.category], {margin: 15, alignItems: 'center', borderRadius: 5}]}>
@@ -40,9 +109,28 @@ function EventCard({ navigation, event }) {
             <Layout style={{backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'space-evenly', marginVertical: 10}}>
               <Text style={[{backgroundColor: '#00b8a9', paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5}, displayOwner]}>Your Event</Text>
               <Text style={[diplayJoinStatus, {backgroundColor: '#00b8a9', padding: 5, borderRadius: 5}]}>Joined</Text>
-              <Button size="tiny">
+              {/* <Button size="tiny">
                 <Text>Join Event</Text>
-              </Button>
+              </Button> */}
+              {!isConfirm ? (
+                <Button
+                  size="tiny"
+                  onPressOut={() => {
+                    pressJoin();
+                  }}
+                >
+                  <Text>Join Event</Text>
+                </Button>
+              ) : (
+                <Button
+                  size="tiny"
+                  onPressOut={() => {
+                    pressRemoveJoin();
+                  }}
+                >
+                  <Text>Cancel Join</Text>
+                </Button>
+              )}
             </Layout>
           </Layout>
         </ImageBackground>
