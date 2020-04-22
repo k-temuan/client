@@ -72,7 +72,7 @@ function UpdateEventForm({ navigation, route }) {
     // TOGGLE_SUBMIT_EVENT
     if (update_status.postUpdate === "success") {
       navigation.navigate("Details", { id: updated.id });
-      navigation.reset({ index: 1, routes: [{ name: "Details" }] });
+      // navigation.reset({ index: 1, routes: [{ name: "Details" }] });
       dispatch({
         type: "TOGGLE_UPDATE_EVENT",
       });
