@@ -67,7 +67,6 @@ function CreateEventForm({ navigation }) {
   const [description, setDescription] = React.useState("");
   const [maxAttendees, setMaxAttendees] = React.useState("");
   const [location, setLocation] = React.useState({});
-  console.log("location====", location);
   const [fileObj, setFileObj] = React.useState({
     uri:
       "https://clinicaesperanza.org/wp-content/uploads/2019/09/profile-placeholder.png",
