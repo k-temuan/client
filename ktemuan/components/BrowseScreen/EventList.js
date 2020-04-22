@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { FlatList, ScrollView, TouchableHighlight } from 'react-native';
 import EventListItem from './EventListItem';
 import { Button, Layout, Text } from '@ui-kitten/components';
+import EventCard from './EventCard';
 
 function EventList({ navigation }) {
   const events = useSelector(state => state.event.events);
@@ -20,7 +21,7 @@ function EventList({ navigation }) {
     <Layout>
       <FlatList
         data={filteredEvents}
-        renderItem={({ item }) => <EventListItem event={item} navigation={navigation} />}
+        renderItem={({ item }) => <EventCard event={item} navigation={navigation} />}
         keyExtractor={item => String(item.id)}
       />
     </Layout>

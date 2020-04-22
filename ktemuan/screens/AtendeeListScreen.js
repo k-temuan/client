@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import AttendeeList from '../components/AttendeeListScreen/AttendeeList'
 import { FETCH_ATTENDEES_LIST } from '../store/action/attendeeAction';
+import AttendeeListEmpty from '../components/AttendeeListScreen/AttendeeListEmpty';
 
 function AtendeeListScreen({ navigation, route }) {
   const { eventId } = route.params;
@@ -42,6 +43,7 @@ function AtendeeListScreen({ navigation, route }) {
   attendeeContent = AttendeeList
   // if error etc
   // attendeeContent = AttendeeListError
+  if (attendees.length === 0) attendeeContent = AttendeeListEmpty
 
   const Stack = createStackNavigator()
   return (

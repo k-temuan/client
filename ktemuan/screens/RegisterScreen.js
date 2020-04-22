@@ -111,15 +111,6 @@ function RegisterScreen({ navigation }) {
             status={registerError.lastname ? 'danger' : ''}
           />
           <Divider />
-          <Input
-            placeholder='Photo'
-            value={photo}
-            onChangeText={setPhoto}
-            caption='Photo error placeholder'
-          />
-          <Divider />
-          <Button>Pickaphoto</Button>
-          <Divider />
           <Button onPressOut={handlePressOut}>Register</Button>
         </KeyboardAwareScrollView>
       </Layout>
