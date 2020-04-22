@@ -10,6 +10,7 @@ import {
   UNJOIN_EVENT_FROM_DETAIL,
   REJOIN_EVENT_FROM_DETAIL,
 } from "../../store/action/attendeeAction";
+import { FETCH_EVENT_TO_UPDATE } from "../../store/action/updateAction";
 import { DELETE_EVENT } from "../../store/action/detailAction";
 import MapView, { Marker } from "react-native-maps";
 
@@ -48,6 +49,7 @@ function DetailItem({ navigation }) {
     if (event.User) {
       if (userCred.id == event.User.id) {
         setIsCreator(true);
+        dispatch(FETCH_EVENT_TO_UPDATE(event.id));
       } else {
         setIsCreator(false);
       }
@@ -234,11 +236,14 @@ function DetailItem({ navigation }) {
               <Layout
                 style={{ flexDirection: "row", justifyContent: "space-evenly" }}
               >
-                <Button size="small"
+                <Button
+                  size="small"
                   onPressOut={() => {
-                    navigation.push('Update', { id: event.id })
+                    navigation.push("Update", { id: event.id });
                   }}
-                >Update Event</Button>
+                >
+                  Update Event
+                </Button>
                 <Button
                   size="small"
                   onPressOut={() => {
