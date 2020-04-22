@@ -13,6 +13,7 @@ import {
 import { FETCH_EVENT_TO_UPDATE } from "../../store/action/updateAction";
 import { DELETE_EVENT } from "../../store/action/detailAction";
 import MapView, { Marker } from "react-native-maps";
+import moment from "moment";
 
 let myMap;
 const placeholder =
@@ -154,6 +155,9 @@ function DetailItem({ navigation }) {
           <Text category="h2" style={{ paddingLeft: 5 }}>
             {event.name}
           </Text>
+          <Text category="h6" style={{ paddingLeft: 5 }}>
+            {moment(event.date_time).format("LLLL")}
+          </Text>
         </Layout>
         <Layout
           style={[
@@ -162,9 +166,12 @@ function DetailItem({ navigation }) {
           ]}
         >
           <Text category="h6">{event.description}</Text>
-          <Text style={{ fontWeight: "bold", fontSize: 11 }}>
-            A {event.category} Event
-          </Text>
+          {event.category && (
+            <Text style={{ fontWeight: "bold", fontSize: 11 }}>
+              {event.category.charAt(0).toUpperCase() + event.category.slice(1)}{" "}
+              Event
+            </Text>
+          )}
           {/* <Layout style={{ flexDirection: "row", flexWrap: "wrap" }}>
             {tagsList}
           </Layout> */}
