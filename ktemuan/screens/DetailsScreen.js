@@ -20,7 +20,7 @@ function DetailsScreen({ navigation, route }) {
 
   React.useEffect(() => {
     dispatch(FETCH_EVENT_DETAIL(id));
-  }, [dispatch, id]);
+  }, [id]);
 
   let atendeeList = <></>;
   if (event.users) {
