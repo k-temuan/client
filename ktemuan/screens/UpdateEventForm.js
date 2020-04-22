@@ -151,7 +151,7 @@ function UpdateEventForm({ navigation, route }) {
 
   const google = (
     <GooglePlacesAutocomplete
-      placeholder="Set Event Location"
+      placeholder="Update Event Location"
       minLength={2} // minimum length of text to search
       autoFocus={false}
       returnKeyType={"search"} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
@@ -273,7 +273,7 @@ function UpdateEventForm({ navigation, route }) {
             {google}
           </View>
           <Divider />
-          <Button onPress={pickImage}>Upload Event Image</Button>
+          <Button onPress={pickImage}>Re-Upload Event Image</Button>
           <Divider />
           <Input
             placeholder="Date and Time"
@@ -286,7 +286,9 @@ function UpdateEventForm({ navigation, route }) {
             caption={updateEventError.datetime || "Error placeholder"}
             status={updateEventError.datetime ? "danger" : ""}
           />
-          <Button onPressOut={() => setDatePicker(true)}>Set Event Date</Button>
+          <Button onPressOut={() => setDatePicker(true)}>
+            Update Event Date
+          </Button>
           <Divider />
           <DateTimePickerModal
             minimumDate={new Date()}
