@@ -47,7 +47,7 @@ export const PATCH_EVENT = (inputObj) => {
       file,
       userCred,
     } = inputObj;
-    let tags = [72];
+    let tags = [6];
     const strTags = JSON.stringify(tags);
     const strLoc = JSON.stringify(location);
     let body = new FormData();

@@ -194,22 +194,28 @@ function CreateEventForm({ navigation }) {
       styles={{
         textInputContainer: {
           width: "100%",
-          backgroundColor: "#3366ff",
+          height: 50,
+          backgroundColor: "#fff",
           borderRadius: 5,
+          borderWidth: 1,
+          borderColor: "#e5e9f2",
+          marginTop: 5,
+          marginBottom: 5,
         },
         textInput: {
-          backgroundColor: "#1b2139",
-          color: "#fff",
+          backgroundColor: "#f8f9fd",
+          color: "#000",
+          marginTop: 5,
+          height: "80%",
         },
         description: {
-          fontWeight: "bold",
-          color: "#fff",
+          color: "#000",
         },
         predefinedPlacesDescription: {
           color: "#1faadb",
         },
         row: {
-          backgroundColor: "#1b2139",
+          backgroundColor: "#cccccc",
         },
         poweredContainer: {
           backgroundColor: "#ebebeb",
@@ -290,7 +296,6 @@ function CreateEventForm({ navigation }) {
             {google}
           </View>
           <Divider />
-          <Button onPress={pickImage}>Upload Event Image</Button>
           <Divider />
           <Input
             placeholder="Date and Time"
@@ -312,11 +317,14 @@ function CreateEventForm({ navigation }) {
             onConfirm={handleConfirmDate}
             onCancel={() => setDatePicker(false)}
           />
-          <Button onPressOut={submitForm} disabled={event_status.postLoading}>
-            Submit
-          </Button>
-          <Divider />
-          <Button onPressOut={geBack}>Back</Button>
+          <Button onPress={pickImage}>Upload Event Image</Button>
+          <Layout style={{ marginTop: 12 }}>
+            <Button onPressOut={submitForm} disabled={event_status.postLoading}>
+              Submit
+            </Button>
+            <Divider />
+            <Button onPressOut={geBack}>Back</Button>
+          </Layout>
         </Layout>
       </KeyboardAwareScrollView>
     </>
