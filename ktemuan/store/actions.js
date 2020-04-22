@@ -64,7 +64,7 @@ export const POST_EVENT = (inputObj) => {
       userCred,
     } = inputObj;
 
-    let tags = [6];
+    let tags = [1];
     // tags.push(1)
     const strTags = JSON.stringify(tags);
     const strLoc = JSON.stringify(location);

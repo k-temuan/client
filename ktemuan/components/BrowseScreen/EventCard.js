@@ -130,6 +130,7 @@ function EventCard({ navigation, event }) {
                     source={{
                       uri: `https://api.adorable.io/avatars/125/${event.User.email}.png`,
                     }}
+                    style={{marginRight: 7}}
                   />
                   <Text style={{ fontSize: 18 }}>
                     {event.User.firstname} {event.User.lastname}

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ktemuan",
+    "name": "K-Temuan",
     "slug": "ktemuan",
     "platforms": [
       "ios",
@@ -9,7 +9,7 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logotype01_small.png",
     "splash": {
       "image": "./assets/logo1.png",
       "resizeMode": "contain",
@@ -23,6 +23,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.h8chromefox.ktemuan",
+      "versionCode": 1
     }
   }
 }
