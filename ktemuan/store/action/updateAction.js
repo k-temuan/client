@@ -1,5 +1,5 @@
-import { apiURL, appStorageKey } from './index';
-import axios from 'axios';
+import { apiURL, appStorageKey } from "./index";
+import axios from "axios";
 
 function updateEventErrorFromArrMsg(arrMsg) {
   let result = {};
@@ -37,6 +37,7 @@ function updateEventErrorFromArrMsg(arrMsg) {
 export const PATCH_EVENT = (inputObj) => {
   return (dispatch, getState) => {
     const {
+      id,
       name,
       category,
       description,
@@ -46,7 +47,6 @@ export const PATCH_EVENT = (inputObj) => {
       file,
       userCred,
     } = inputObj;
-
     let tags = [72];
     const strTags = JSON.stringify(tags);
     const strLoc = JSON.stringify(location);
@@ -63,23 +63,23 @@ export const PATCH_EVENT = (inputObj) => {
 
     dispatch({
       type: "TOGGLE_UPDATE_LOADING",
-      payload: true
-    })
+      payload: true,
+    });
 
     axios({
-      url: `${apiURL}/events/${eventId}`,
+      url: `${apiURL}/events/${id}`,
       method: "PATCH",
       headers: {
-        access_token: userCred.access_token
+        access_token: userCred.access_token,
       },
-      data: body
+      data: body,
     })
-      .then(_ => {
+      .then((_) => {
         dispatch({
-          type: "TOGGLE_UPDATE_EVENT_SUCCESS"
-        })
+          type: "TOGGLE_UPDATE_EVENT_SUCCESS",
+        });
       })
-      .catch(err => {
+      .catch((err) => {
         try {
           let objError = updateEventErrorFromArrMsg(
             err.response.data.errors || []
@@ -88,51 +88,49 @@ export const PATCH_EVENT = (inputObj) => {
             type: "SET_SUBMIT_EVENT_ERROR",
             payload: objError,
           });
-        }
-        catch(error) {
-        }
+        } catch (error) {}
       })
-      .finally(_ => {
+      .finally((_) => {
         dispatch({
           type: "TOGGLE_UPDATE_LOADING",
-          payload: false
-        })
-      })
-  }
-}
+          payload: false,
+        });
+      });
+  };
+};
 
 export const FETCH_EVENT_TO_UPDATE = (eventId) => {
   return (dispatch, getState) => {
     const userCred = getState().landing.userCred;
     dispatch({
       type: "TOGGLE_UPDATE_LOADING",
-      payload: true
-    })
+      payload: true,
+    });
     axios({
       url: `${apiURL}/events/${eventId}`,
-      method: 'GET',
+      method: "GET",
       headers: {
-        access_token: userCred.access_token
-      }
+        access_token: userCred.access_token,
+      },
     })
       .then(({ data }) => {
         dispatch({
           type: "SET_EVENT_TO_UPDATE",
-          payload: data.event
-        })
+          payload: data.event,
+        });
       })
-      .catch(err => {
+      .catch((err) => {
         try {
-          console.log(err)
+          console.log(err);
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       })
-      .finally(_ => {
+      .finally((_) => {
         dispatch({
           type: "TOGGLE_UPDATE_LOADING",
-          payload: false
-        })
-      })
-  }
-}
+          payload: false,
+        });
+      });
+  };
+};

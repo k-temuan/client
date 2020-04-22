@@ -19,7 +19,10 @@ import { FETCH_TAGS } from "../store/tagAction";
 import moment from "moment";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 // import { POST_EVENT } from "../store/actions";
-import { FETCH_EVENT_TO_UPDATE, PATCH_EVENT } from '../store/action/updateAction'
+import {
+  // FETCH_EVENT_TO_UPDATE,
+  PATCH_EVENT,
+} from "../store/action/updateAction";
 
 import { YellowBox } from "react-native";
 
@@ -38,47 +41,51 @@ function UpdateEventForm({ navigation, route }) {
   // const submitEventError = useSelector(
   //   (state) => state.create.submitEventError
   // );
-  const updated = useSelector(state => state.update.updated)
-  const updateEventError = useSelector(state => state.update.updateEventError);
+  const updated = useSelector((state) => state.update.updated);
+  const updateEventError = useSelector(
+    (state) => state.update.updateEventError
+  );
 
-  const [isDatePicked, setIsDatePicked] = React.useState(false);
+  const [isDatePicked, setIsDatePicked] = React.useState(true);
 
-  const [radio, setRadio] = React.useState("");
+  const [radio, setRadio] = React.useState(
+    updated.category.charAt(0).toUpperCase() + updated.category.slice(1)
+  );
   const [datePicker, setDatePicker] = React.useState(false);
-  const [date, setDate] = React.useState(new Date());
-  const categories = ["game", "meetup", "study", "bussiness"];
+  const [date, setDate] = React.useState(new Date(updated.date_time));
+  const categories = ["Game", "Meetup", "Study", "Bussiness"];
   // const [selectedTags, setSelectedTags] = React.useState([]);
-  const [name, setName] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [maxAttendees, setMaxAttendees] = React.useState("");
+  const [name, setName] = React.useState(updated.name);
+  const [description, setDescription] = React.useState(updated.description);
+  const [maxAttendees, setMaxAttendees] = React.useState(
+    "" + updated.max_attendees
+  );
   const [location, setLocation] = React.useState({});
-  console.log("location====", location);
   const [fileObj, setFileObj] = React.useState({
     uri:
       "https://clinicaesperanza.org/wp-content/uploads/2019/09/profile-placeholder.png",
     name: "userProfile.jpg",
     type: "image/jpg",
   });
-
   React.useEffect(() => {
     // TOGGLE_SUBMIT_EVENT_SUCCESS
     // TOGGLE_SUBMIT_EVENT
     if (update_status.postUpdate === "success") {
-      navigation.push('Details', { id: updated.id })
+      navigation.push("Details", { id: updated.id });
       dispatch({
         type: "TOGGLE_UPDATE_EVENT",
       });
     }
-    dispatch(FETCH_EVENT_TO_UPDATE(id))
-    
-    setRadio(updated.category || "")
-    setName(updated.name || "")
-    setDescription(updated.description || "")
-    setDate(new Date(updated.date_time) || new Date())
-    setIsDatePicked(true)
-    setMaxAttendees(""+updated.max_attendees || '')
-    setLocation(updated.location || {})
-    setFileObj(updated.fileObj || fileObj)
+    // dispatch(FETCH_EVENT_TO_UPDATE(id));
+
+    // if (updated.category) {
+    //   setRadio(
+    //     updated.category.charAt(0).toUpperCase() + updated.category.slice(1) ||
+    //       ""
+    //   );
+    // }
+    // setLocation(updated.location || {});
+    // setFileObj(updated.fileObj || fileObj);
   }, [dispatch, id, updated]);
 
   // fetch tags
@@ -111,6 +118,7 @@ function UpdateEventForm({ navigation, route }) {
       type: "CLEAR_UPDATE_EVENT_ERROR",
     });
     const body = {
+      id: updated.id,
       name,
       category: radio,
       description,
@@ -121,9 +129,10 @@ function UpdateEventForm({ navigation, route }) {
       userCred,
     };
     dispatch(PATCH_EVENT(body));
+    navigation.push("Details", { id: updated.id });
   }
   function geBack() {
-    navigation.navigate('Details', { id: updated.id })
+    navigation.navigate("Details", { id: updated.id });
   }
 
   const radioGroup = (
@@ -142,12 +151,12 @@ function UpdateEventForm({ navigation, route }) {
 
   const google = (
     <GooglePlacesAutocomplete
-      placeholder="Set Event Location"
+      placeholder="Update Event Location"
       minLength={2} // minimum length of text to search
       autoFocus={false}
       returnKeyType={"search"} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
       keyboardAppearance={"light"} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
-      listViewDisplayed="auto" // true/false/undefined
+      listViewDisplayed="false" // true/false/undefined
       fetchDetails={true}
       renderDescription={(row) => row.description} // custom description render
       onPress={(data, details = null) => {
@@ -264,7 +273,7 @@ function UpdateEventForm({ navigation, route }) {
             {google}
           </View>
           <Divider />
-          <Button onPress={pickImage}>Upload Event Image</Button>
+          <Button onPress={pickImage}>Re-Upload Event Image</Button>
           <Divider />
           <Input
             placeholder="Date and Time"
@@ -277,7 +286,9 @@ function UpdateEventForm({ navigation, route }) {
             caption={updateEventError.datetime || "Error placeholder"}
             status={updateEventError.datetime ? "danger" : ""}
           />
-          <Button onPressOut={() => setDatePicker(true)}>Set Event Date</Button>
+          <Button onPressOut={() => setDatePicker(true)}>
+            Update Event Date
+          </Button>
           <Divider />
           <DateTimePickerModal
             minimumDate={new Date()}
