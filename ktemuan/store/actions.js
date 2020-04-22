@@ -1,7 +1,7 @@
 import axios from "axios";
 import { AsyncStorage } from "react-native";
 
-const apiURL = "http://192.168.43.189:3000";
+const apiURL = "http://192.168.0.14:3000";
 
 const appStorageKey = "ktemuan@AsyncStorage";
 
@@ -63,7 +63,7 @@ export const POST_EVENT = (inputObj) => {
       userCred,
     } = inputObj;
 
-    let tags = [];
+    let tags = [6];
     // tags.push(1)
     const strTags = JSON.stringify(tags);
     const strLoc = JSON.stringify(location);

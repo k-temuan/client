@@ -124,7 +124,7 @@ function DetailItem({ navigation }) {
               borderLeftWidth: 5,
               borderTopRightRadius: 10,
               borderTopLeftRadius: 10,
-              alignItems: 'center'
+              alignItems: "center",
             },
             styles.card[event.category],
           ]}
@@ -135,12 +135,32 @@ function DetailItem({ navigation }) {
               style={[styles.fullScreenBox, { marginHorizontal: 1 }]}
             />
           )}
-          <Text category="h2" style={{ paddingLeft: 5, fontWeight: 'bold', textAlign: 'center' }}>
+          <Text
+            category="h1"
+            status="primary"
+            style={{
+              paddingLeft: 5,
+              fontWeight: "bold",
+              textAlign: "center",
+              paddingBottom: 20,
+            }}
+          >
             {event.name}
           </Text>
           <Text category="h6" style={{ paddingLeft: 5 }}>
             {moment(event.date_time).format("LLLL")}
           </Text>
+          {event.User && (
+            <Text category="s1" style={{ paddingLeft: 5 }}>
+              created by{" "}
+              <Text
+                category="s1"
+                style={{ paddingLeft: 5, fontStyle: "italic" }}
+              >
+                {event.User.firstname}
+              </Text>
+            </Text>
+          )}
         </Layout>
         <Layout
           style={[
@@ -148,9 +168,14 @@ function DetailItem({ navigation }) {
             styles.card[event.category],
           ]}
         >
-          <Text category="h6" style={{textAlign: 'center'}}>{event.description}</Text>
+          <Text category="h6" style={{ textAlign: "center" }}>
+            {event.description}
+          </Text>
           {event.category && (
-            <Text style={{ fontWeight: "bold", fontSize: 16, textAlign: 'center' }}>
+            <Text
+              category="s1"
+              style={{ fontWeight: "bold", textAlign: "center" }}
+            >
               {event.category.charAt(0).toUpperCase() + event.category.slice(1)}{" "}
               Event
             </Text>
@@ -193,6 +218,7 @@ function DetailItem({ navigation }) {
                 {isConfirm ? (
                   <Button
                     size="small"
+                    status="danger"
                     onPressOut={() => {
                       pressRemoveJoin();
                     }}
@@ -211,7 +237,7 @@ function DetailItem({ navigation }) {
                 )}
               </Layout>
             )}
-            <Layout style={{ display: ownerActionStyle }}>
+            <Layout style={{ display: ownerActionStyle, marginTop: 20 }}>
               <Text category="h6" style={{ textAlign: "center" }}>
                 You are the creator of this event{"\n"}
               </Text>
@@ -228,6 +254,7 @@ function DetailItem({ navigation }) {
                 </Button>
                 <Button
                   size="small"
+                  status="danger"
                   onPressOut={() => {
                     pressDelete();
                   }}
@@ -311,10 +338,18 @@ function DetailItem({ navigation }) {
             style={{ marginTop: 10 }}
           >
             <Layout
-              style={{ flexDirection: "row", flexWrap: "wrap", maxHeight: 100 }}
+              style={{
+                flexDirection: "row",
+                flexWrap: "wrap",
+                maxHeight: 100,
+                alignItems: "center",
+              }}
             >
-              <Text category="h5" style={{ textAlign: "center" }}>
-                Attendees List >
+              <Text
+                category="h5"
+                style={{ textAlign: "center", fontWeight: "bold" }}
+              >
+                Attendees List :
               </Text>
               {filteredAttendeesList.length !== 0 &&
                 filteredAttendeesList.map((item) => (

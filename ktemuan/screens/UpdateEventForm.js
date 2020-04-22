@@ -72,7 +72,7 @@ function UpdateEventForm({ navigation, route }) {
     // TOGGLE_SUBMIT_EVENT
     if (update_status.postUpdate === "success") {
       navigation.navigate("Details", { id: updated.id });
-      navigation.reset({ index: 1, routes: [{ name: "Details" }]})
+      // navigation.reset({ index: 1, routes: [{ name: "Details" }] });
       dispatch({
         type: "TOGGLE_UPDATE_EVENT",
       });
@@ -178,22 +178,28 @@ function UpdateEventForm({ navigation, route }) {
       styles={{
         textInputContainer: {
           width: "100%",
-          backgroundColor: "#3366ff",
+          height: 50,
+          backgroundColor: "#fff",
           borderRadius: 5,
+          borderWidth: 1,
+          borderColor: "#e5e9f2",
+          marginTop: 5,
+          marginBottom: 5,
         },
         textInput: {
-          backgroundColor: "#1b2139",
-          color: "#fff",
+          backgroundColor: "#f8f9fd",
+          color: "#000",
+          marginTop: 5,
+          height: "80%",
         },
         description: {
-          fontWeight: "bold",
-          color: "#fff",
+          color: "#000",
         },
         predefinedPlacesDescription: {
           color: "#1faadb",
         },
         row: {
-          backgroundColor: "#1b2139",
+          backgroundColor: "#cccccc",
         },
         poweredContainer: {
           backgroundColor: "#ebebeb",
@@ -248,9 +254,7 @@ function UpdateEventForm({ navigation, route }) {
             placeholder={radio + " Event Name"}
             value={name}
             onChangeText={setName}
-            caption={
-              updateEventError.name || ""
-            }
+            caption={updateEventError.name || ""}
             status={updateEventError.name ? "danger" : ""}
           />
           <Input
@@ -274,7 +278,6 @@ function UpdateEventForm({ navigation, route }) {
             {google}
           </View>
           <Divider />
-          <Button onPress={pickImage}>Re-Upload Event Image</Button>
           <Divider />
           <Input
             placeholder="Date and Time"
@@ -298,11 +301,17 @@ function UpdateEventForm({ navigation, route }) {
             onConfirm={handleConfirmDate}
             onCancel={() => setDatePicker(false)}
           />
-          <Button onPressOut={submitForm} disabled={update_status.postLoading}>
-            Submit
-          </Button>
-          <Divider />
-          <Button onPressOut={geBack}>Back</Button>
+          <Button onPress={pickImage}>Re-Upload Event Image</Button>
+          <Layout style={{ marginTop: 12 }}>
+            <Button
+              onPressOut={submitForm}
+              disabled={update_status.postLoading}
+            >
+              Update
+            </Button>
+            <Divider />
+            <Button onPressOut={geBack}>Back</Button>
+          </Layout>
         </Layout>
       </KeyboardAwareScrollView>
     </>
