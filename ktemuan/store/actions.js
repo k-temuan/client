@@ -1,7 +1,8 @@
 import axios from "axios";
 import { AsyncStorage } from "react-native";
 
-const apiURL = "http://192.168.0.14:3000";
+// const apiURL = "http://192.168.43.189:3000";
+const apiURL = "https://k-temuan.herokuapp.com";
 
 const appStorageKey = "ktemuan@AsyncStorage";
 

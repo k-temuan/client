@@ -20,7 +20,7 @@ import moment from "moment";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { POST_EVENT } from "../store/actions";
 
-import { YellowBox } from "react-native";
+import { YellowBox, Image } from "react-native";
 
 YellowBox.ignoreWarnings([
   "VirtualizedLists should never be nested", // TODO: Remove when fixed
@@ -79,39 +79,10 @@ function CreateEventForm({ navigation }) {
     setDatePicker(false);
     setDate(input);
   }
-  function pickDocument() {
-    DocumentPicker.getDocumentAsync({
-      type: "image/*",
-    })
-      .then((result) => {
-        console.log(result);
-        if (result.uri) {
-          return FileSystem.readAsStringAsync(result.uri, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
-        }
-      })
-      .then((result) => {
-        console.log(result);
-      });
-  }
-  function pickImageAndUpload() {
-    //save file uri
-    ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-    })
-      .then((result) => {
-        // console.log(result)
-        if (!result.cancelled) {
-          return FileSystem.readAsStringAsync(result.uri, {
-            encoding: FileSystem.EncodingType.Base64,
-          });
-        }
-      })
-      .then((result) => {
-        // console.log(result)
-      });
+  function handleAttendeeInput(text) {
+    if (Number(text) || Number(text) >= 0) {
+      setMaxAttendees(text)
+    }
   }
   function pickImage() {
     //save file uri
@@ -169,7 +140,7 @@ function CreateEventForm({ navigation }) {
   const google = (
     <GooglePlacesAutocomplete
       placeholder="Set Event Location"
-      minLength={2} // minimum length of text to search
+      minLength={2}
       autoFocus={false}
       returnKeyType={"search"} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
       keyboardAppearance={"light"} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
@@ -188,8 +159,7 @@ function CreateEventForm({ navigation }) {
       query={{
         // available options: https://developers.google.com/places/web-service/autocomplete
         key: "AIzaSyDF0f24ema_HtTZrUCZSo3iG7HIk8Jkd-Q",
-        language: "en", // language of the results
-        // types: 'establishment' // default: 'geocode'
+        language: "en", 
       }}
       styles={{
         textInputContainer: {
@@ -221,8 +191,6 @@ function CreateEventForm({ navigation }) {
           backgroundColor: "#ebebeb",
         },
       }}
-      // currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
-      // currentLocationLabel="Current location"
       nearbyPlacesAPI="GooglePlacesSearch" // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
       GoogleReverseGeocodingQuery={
         {
@@ -237,17 +205,13 @@ function CreateEventForm({ navigation }) {
       GooglePlacesDetailsQuery={
         {
           // available options for GooglePlacesDetails API : https://developers.google.com/places/web-service/details
-          // fields: "name,rating,formatted_phone_number",
         }
       }
       filterReverseGeocodingByTypes={[
         "locality",
         "administrative_area_level_3",
-      ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-      // predefinedPlaces={[homePlace, workPlace]}
-      debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-      // renderLeftButton={()  => <Image source={require('path/custom/left-icon')} />}
-      // renderRightButton={() => <Text>Custom text after the input</Text>}
+      ]} 
+      debounce={200}
     />
   );
 
@@ -271,7 +235,7 @@ function CreateEventForm({ navigation }) {
             value={name}
             onChangeText={setName}
             caption={
-              submitEventError.name || "Error placeholder (empty for future)"
+              submitEventError.name || ""
             }
             status={submitEventError.name ? "danger" : ""}
           />
@@ -281,14 +245,14 @@ function CreateEventForm({ navigation }) {
             multiline={true}
             value={description}
             onChangeText={setDescription}
-            caption={submitEventError.description || "Error placeholder"}
+            caption={submitEventError.description || ""}
             status={submitEventError.description ? "danger" : ""}
           />
           <Input
             placeholder="Maximum antendees"
             value={maxAttendees}
-            onChangeText={setMaxAttendees}
-            caption={submitEventError.maxAttendees || "Error placeholder"}
+            onChangeText={ text => { handleAttendeeInput(text) }}
+            caption={submitEventError.maxAttendees || ""}
             status={submitEventError.maxAttendees ? "danger" : ""}
           />
           {/* <Input disabled={true} placeholder={"Image name"} /> */}
@@ -296,19 +260,21 @@ function CreateEventForm({ navigation }) {
             {google}
           </View>
           <Divider />
-          <Divider />
-          <Input
-            placeholder="Date and Time"
-            onFocus={() => setDatePicker(true)}
-            value={
-              isDatePicked
-                ? moment(date).format("LLLL")
-                : `Please set date and time`
-            }
-            caption={submitEventError.datetime || "Error placeholder"}
-            status={submitEventError.datetime ? "danger" : ""}
-          />
-          <Button onPressOut={() => setDatePicker(true)}>Set Event Date</Button>
+          <Layout style={{marginVertical: 10}}>
+            <Input
+              placeholder="Date and Time"
+              onFocus={() => setDatePicker(true)}
+              value={
+                isDatePicked
+                  ? moment(date).format("LLLL")
+                  : `Please set date and time`
+              }
+              caption={submitEventError.datetime || ""}
+              status={submitEventError.datetime ? "danger" : ""}
+              disabled={true}
+            />
+            <Button size="medium" onPressOut={() => setDatePicker(true)}>Set Event Date</Button>
+          </Layout>
           <Divider />
           <DateTimePickerModal
             minimumDate={new Date()}
@@ -317,10 +283,11 @@ function CreateEventForm({ navigation }) {
             onConfirm={handleConfirmDate}
             onCancel={() => setDatePicker(false)}
           />
+          <Image source={fileObj} style={{width: 100, height: 100, alignSelf: 'center', marginBottom: 5}} />
           <Button onPress={pickImage}>Upload Event Image</Button>
-          <Layout style={{ marginTop: 12 }}>
+          <Layout style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-evenly' }}>
             <Button onPressOut={submitForm} disabled={event_status.postLoading}>
-              Submit
+              Create Event
             </Button>
             <Divider />
             <Button onPressOut={geBack}>Back</Button>

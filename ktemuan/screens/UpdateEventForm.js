@@ -11,23 +11,19 @@ import {
 import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
 import * as ImagePicker from "expo-image-picker";
 import { useSelector, useDispatch } from "react-redux";
 import { FETCH_TAGS } from "../store/tagAction";
 import moment from "moment";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-// import { POST_EVENT } from "../store/actions";
 import {
-  // FETCH_EVENT_TO_UPDATE,
   PATCH_EVENT,
 } from "../store/action/updateAction";
 
-import { YellowBox } from "react-native";
+import { YellowBox, Image } from "react-native";
 
 YellowBox.ignoreWarnings([
-  "VirtualizedLists should never be nested", // TODO: Remove when fixed
+  "VirtualizedLists should never be nested",
 ]);
 
 function UpdateEventForm({ navigation, route }) {
@@ -36,11 +32,7 @@ function UpdateEventForm({ navigation, route }) {
   const { id } = route.params;
 
   const userCred = useSelector((state) => state.landing.userCred);
-  // const tags = useSelector((state) => state.tag.tags);
   const update_status = useSelector((state) => state.update.update_status);
-  // const submitEventError = useSelector(
-  //   (state) => state.create.submitEventError
-  // );
   const updated = useSelector((state) => state.update.updated);
   const updateEventError = useSelector(
     (state) => state.update.updateEventError
@@ -68,25 +60,12 @@ function UpdateEventForm({ navigation, route }) {
     type: "image/jpg",
   });
   React.useEffect(() => {
-    // TOGGLE_SUBMIT_EVENT_SUCCESS
-    // TOGGLE_SUBMIT_EVENT
     if (update_status.postUpdate === "success") {
       navigation.navigate("Details", { id: updated.id });
-      // navigation.reset({ index: 1, routes: [{ name: "Details" }] });
       dispatch({
         type: "TOGGLE_UPDATE_EVENT",
       });
     }
-    // dispatch(FETCH_EVENT_TO_UPDATE(id));
-
-    // if (updated.category) {
-    //   setRadio(
-    //     updated.category.charAt(0).toUpperCase() + updated.category.slice(1) ||
-    //       ""
-    //   );
-    // }
-    // setLocation(updated.location || {});
-    // setFileObj(updated.fileObj || fileObj);
   }, [dispatch, id, updated]);
 
   // fetch tags
@@ -98,6 +77,11 @@ function UpdateEventForm({ navigation, route }) {
     setIsDatePicked(true);
     setDatePicker(false);
     setDate(input);
+  }
+  function handleAttendeeInput(text) {
+    if (Number(text) || Number(text) >= 0) {
+      setMaxAttendees(text)
+    }
   }
   function pickImage() {
     //save file uri
@@ -156,7 +140,7 @@ function UpdateEventForm({ navigation, route }) {
       minLength={2} // minimum length of text to search
       autoFocus={false}
       returnKeyType={"search"} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-      keyboardAppearance={"light"} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
+      keyboardAppearance={"light"} 
       listViewDisplayed="false" // true/false/undefined
       fetchDetails={true}
       renderDescription={(row) => row.description} // custom description render
@@ -221,17 +205,13 @@ function UpdateEventForm({ navigation, route }) {
       GooglePlacesDetailsQuery={
         {
           // available options for GooglePlacesDetails API : https://developers.google.com/places/web-service/details
-          // fields: "name,rating,formatted_phone_number",
         }
       }
       filterReverseGeocodingByTypes={[
         "locality",
         "administrative_area_level_3",
-      ]} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-      // predefinedPlaces={[homePlace, workPlace]}
-      debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-      // renderLeftButton={()  => <Image source={require('path/custom/left-icon')} />}
-      // renderRightButton={() => <Text>Custom text after the input</Text>}
+      ]} 
+      debounce={200} 
     />
   );
 
@@ -269,30 +249,31 @@ function UpdateEventForm({ navigation, route }) {
           <Input
             placeholder="Maximum antendees"
             value={maxAttendees}
-            onChangeText={setMaxAttendees}
+            onChangeText={text => handleAttendeeInput(text)}
             caption={updateEventError.maxAttendees || ""}
             status={updateEventError.maxAttendees ? "danger" : ""}
           />
-          {/* <Input disabled={true} placeholder={"Image name"} /> */}
           <View style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
             {google}
           </View>
           <Divider />
-          <Divider />
-          <Input
-            placeholder="Date and Time"
-            onFocus={() => setDatePicker(true)}
-            value={
-              isDatePicked
-                ? moment(date).format("LLLL")
-                : `Please set date and time`
-            }
-            caption={updateEventError.datetime || ""}
-            status={updateEventError.datetime ? "danger" : ""}
-          />
-          <Button onPressOut={() => setDatePicker(true)}>
-            Update Event Date
-          </Button>
+          <Layout style={{marginVertical: 10}}>
+            <Input
+              placeholder="Date and Time"
+              onFocus={() => setDatePicker(true)}
+              value={
+                isDatePicked
+                  ? moment(date).format("LLLL")
+                  : `Please set date and time`
+              }
+              caption={updateEventError.datetime || ""}
+              status={updateEventError.datetime ? "danger" : ""}
+              disabled={true}
+            />
+            <Button onPressOut={() => setDatePicker(true)}>
+              Update Event Date
+            </Button>
+          </Layout>
           <Divider />
           <DateTimePickerModal
             minimumDate={new Date()}
@@ -301,8 +282,8 @@ function UpdateEventForm({ navigation, route }) {
             onConfirm={handleConfirmDate}
             onCancel={() => setDatePicker(false)}
           />
-          <Button onPress={pickImage}>Re-Upload Event Image</Button>
-          <Layout style={{ marginTop: 12 }}>
+          <Button onPress={pickImage}>Renew Event Image</Button>
+          <Layout style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-evenly' }}>
             <Button
               onPressOut={submitForm}
               disabled={update_status.postLoading}

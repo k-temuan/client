@@ -73,7 +73,7 @@ function RegisterScreen({ navigation }) {
     <Layout style={{ flex: 1, padding: 15 }}>
       <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Avatar source={require('../assets/logotype01_small.png')} size='giant' style={{ borderRadius: 0 }} />
-        <Text style={{ fontWeight: 'bold'}}>K-TEAM-ONE</Text>
+        <Text style={{ fontWeight: 'bold'}}>K-TEMUAN</Text>
       </Layout>
       <Layout style={{ flex: 3 }}>
         <KeyboardAwareScrollView>
