@@ -4,24 +4,19 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const ava_placeholder = require('../../assets/profile-placeholder_f56af.png');
 
-function ProfileItem({}) {
+function ProfileItem() {
   const profile = useSelector(state => state.profile.profile)
 
+  let photoUrl = ava_placeholder
+  if (profile.email) photoUrl = { uri: `https://api.adorable.io/avatars/125/${profile.email}.png` }
+
   return (
-    <Layout style={{flex: 1}}>
-      <Button
-        // onPressOut={() => navigation}
-      >Back</Button>
-      <Text category='h1'>PROFILE</Text>
-      <Layout style={{flex: 1, alignItems: 'center'}}>
-        <Avatar source={ava_placeholder} size='giant' loadingIndicatorSource={ava_placeholder} />
-        <Text>Email</Text>
-      </Layout>
-      <Layout style={{flex: 3}}>
-        <Text>profile id to fetch : { profile.id }</Text>
-        <Text>Show List of SOmething, friendlist?</Text>
-        <Text>Show another list of something, event?</Text>
-      </Layout>
+    <Layout style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Avatar source={photoUrl} size="giant" />
+      <Text category="h4">{ profile.firstname } { profile.lastname }</Text>
+      <Text>{ profile.email }</Text>
+      {/* <Button style={{marginTop: 30}} size="small" onPressOut={() => dispatch(LOGOUT())}>Logout</Button> */}
+      {/* <Text>{ JSON.stringify(userCred) }</Text> */}
     </Layout>
   )
 }

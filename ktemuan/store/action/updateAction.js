@@ -120,11 +120,11 @@ export const FETCH_EVENT_TO_UPDATE = (eventId) => {
         });
       })
       .catch((err) => {
-        try {
-          console.log(err);
-        } catch (error) {
-          console.log(error);
-        }
+        // try {
+        //   console.log(err);
+        // } catch (error) {
+        //   console.log(error);
+        // }
       })
       .finally((_) => {
         dispatch({

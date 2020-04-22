@@ -6,8 +6,6 @@ import { apiURL, appStorageKey } from "./index";
 
 export const FETCH_EVENT_DETAIL = (id) => {
   return (dispatch, getState) => {
-    // handle cached events
-    // console.log(getState())
     const cachedEvent = getState().event.events;
     const userCred = getState().landing.userCred;
     let event = cachedEvent.filter((item) => item.id === id)[0];
@@ -36,7 +34,6 @@ export const FETCH_EVENT_DETAIL = (id) => {
       },
     })
       .then(({ data }) => {
-        console.log(data);
         dispatch({
           type: "SET_EVENT",
           payload: data.event,
@@ -44,7 +41,6 @@ export const FETCH_EVENT_DETAIL = (id) => {
       })
       .catch((err) => {
         try {
-          console.log(err.response);
           dispatch({
             type: "SET_FETCH_DETAIL_ERROR",
             payload: {
@@ -53,7 +49,6 @@ export const FETCH_EVENT_DETAIL = (id) => {
             },
           });
         } catch (error) {
-          console.log(error);
           dispatch({
             type: "SET_FETCH_DETAIL_ERROR",
             payload: {
@@ -88,7 +83,7 @@ export const DELETE_EVENT = ({ eventId, userCred }) => {
     })
       .then(({ data }) => {})
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 };

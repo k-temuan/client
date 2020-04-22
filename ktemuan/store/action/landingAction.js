@@ -20,13 +20,5 @@ export const LOGOUT = () => {
           payload: true
         })
       })
-      .catch(err => {
-        try {
-          console.log(err)
-        } 
-        catch (error) {
-          console.log(error)
-        }
-      })
   }
 }

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { AsyncStorage } from "react-native";
-// import { SERVER_URL } from 'react-native-dotenv';
 
 const apiURL = "http://192.168.43.189:3000";
 
@@ -64,12 +63,6 @@ export const POST_EVENT = (inputObj) => {
       userCred,
     } = inputObj;
 
-    // tags => comma delimited string = 'another,one,bites,the,dust'
-    // check from tags list in store
-    // if exist, take the id
-    // else, create new tag, tak the id
-    // request to server stringified array of tagId = "[1,2,3,4,5,6]"
-
     let tags = [];
     // tags.push(1)
     const strTags = JSON.stringify(tags);
@@ -85,8 +78,6 @@ export const POST_EVENT = (inputObj) => {
     body.append("location", strLoc);
     body.append("tags", strTags);
 
-    console.log("send body to post/events");
-    console.log(apiURL);
     dispatch({
       type: "TOGGLE_SUBMIT_EVENT_LOADING",
       payload: true,
@@ -102,19 +93,16 @@ export const POST_EVENT = (inputObj) => {
       data: body,
     })
       .then((res) => {
-        console.log(res);
         dispatch({
           type: "TOGGLE_SUBMIT_EVENT_SUCCESS",
         });
       })
       .catch((err) => {
-        console.log(Object.keys(err));
         if (err.message === "Network Error") {
           for (let key of Object.keys(err)) {
-            console.log(err[key]);
+            // console.log(err[key]);
           }
         } else if (err.response) {
-          console.log(err.response.data.errors);
           let objError = submitEventErrorFromArrMsg(
             err.response.data.errors || []
           );
@@ -123,18 +111,13 @@ export const POST_EVENT = (inputObj) => {
             payload: objError,
           });
         } else {
-          console.log(err);
+          // console.log(err);
         }
-        console.log("error?");
-        console.log(err);
         dispatch({
           type: "TOGGLE_SUBMIT_EVENT",
         });
       })
       .finally((_) => {
-        // navigate to browsing
-        // if success toggle submit event success
-        console.log("finished?");
         dispatch({
           type: "TOGGLE_SUBMIT_EVENT_LOADING",
           payload: false,
@@ -148,23 +131,8 @@ export const CHECK_PERSISTED_CRED = () => {
     let objCred = {};
     AsyncStorage.getItem(appStorageKey)
       .then((result) => {
-        // console.log(JSON.parse(result));
         if (result) {
           objCred = JSON.parse(result);
-          console.clear();
-          console.log(objCred);
-          // to skip register/login page dev
-          // dispatch({
-          //   type: "SET_USER_CRED",
-          //   payload: objCred
-          // })
-          // dispatch({
-          //   type: "TOGGLE_NEED_LOGIN",
-          //   payload: false
-          // })
-
-          // ENABLE IF SERVER AVAILABLE
-          // how to check if token is valid? currently, fetch something
           if (objCred.access_token) {
             return axios({
               url: `${apiURL}/events/1`,
@@ -191,7 +159,6 @@ export const CHECK_PERSISTED_CRED = () => {
         });
       })
       .catch((err) => {
-        // if (err.response) console.log(err.response);
         if (err.response) {
           if (err.response.status === 404) {
             dispatch({
@@ -229,7 +196,6 @@ export const SAVE_CRED = (credObj) => {
     // currently replacing all parsed data in async storage
     AsyncStorage.setItem(appStorageKey, JSON.stringify(credObj))
       .then((_) => {
-        console.log(credObj);
         // from axios, save to asyncstorage
         dispatch({
           type: "SET_USER_CRED",
@@ -239,7 +205,6 @@ export const SAVE_CRED = (credObj) => {
           type: "TOGGLE_NEED_LOGIN",
           payload: false,
         });
-        console.log("cred saved to async storage");
       })
       .catch((err) => {
         dispatch({
@@ -374,20 +339,16 @@ export const FETCH_EVENTS = ({ userCred }) => {
       .catch((err) => {
         //
         if (err.response) {
-          for (let key of Object.keys(err)) {
-            console.log(err[key]);
-          }
           try {
-            console.log(err.response.data.errors);
+            // console.log(err.response.data.errors);
             let msg = err.response.data.errors[0];
             events_status_template = {
               ...events_status_template,
               error: msg,
             };
           } catch (error) {
-            console.log(error.message);
             for (let key of Object.keys(error)) {
-              console.log(error[key]);
+              // console.log(error[key]);
             }
           }
         }

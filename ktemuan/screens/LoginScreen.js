@@ -10,8 +10,8 @@ function LoginScreen({ navigation, route }) {
   const loginError = useSelector(state => state.landing.loginError);
   const loginLoading = useSelector(state => state.landing.loginLoading);
   
-  const [email, setEmail] = React.useState('lele@yeye.com');
-  const [password, setPassword] = React.useState('leleyeye');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   React.useEffect(() => {
     if (needLogin === false && navigation.isFocused()) {

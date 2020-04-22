@@ -3,6 +3,7 @@ import { Layout, Text, Spinner } from '@ui-kitten/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { CHECK_PERSISTED_CRED } from '../store/actions';
 import { AsyncStorage } from 'react-native';
+import { styles } from '../styles';
 
 function LoadingSplashScreen({ navigation }) {
   const dispatch = useDispatch()
@@ -57,7 +58,7 @@ function LoadingSplashScreen({ navigation }) {
   //  else remove persisting cred, toggle needlogin to true (will send to landing)
   // if not exist set needlogin to true (will send to landing)
   return (
-    <Layout>
+    <Layout style={[styles.container, {justifyContent: 'center', alignItems: 'center'}]}>
       <Text category='h1'>Please wait while we prepare your app</Text>
     </Layout>
   )

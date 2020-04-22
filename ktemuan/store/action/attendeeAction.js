@@ -7,7 +7,6 @@ export const FETCH_ATTENDEES_LIST = (eventId) => {
   return (dispatch, getState) => {
     const userCred = getState().landing.userCred;
     const event = getState().detail.event
-    console.log(event);
     // event.users
     dispatch({
       type: "SET_ATENDEES",
