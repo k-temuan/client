@@ -58,29 +58,38 @@ function BrowseScreen({ navigation }) {
   else if (events_status.error) eventListContainer = ErrorItem
   else if (events_status.empty || events.length === 0) eventListContainer = EmptyItem
   
-  const buttonOptions = categories.map((item, i) => <Button key={i} size='medium' onPressOut={() => handleChosen(item)}>{item}</Button>)
+  const buttonOptions = categories.map((item, i) => {
+    const isDiplayed = category === item;
+    const displayButton = isDiplayed ? {display: 'none'} : {display: 'flex'}
+    return <Button key={i} size='medium' onPressOut={() => handleChosen(item)} style={[{marginHorizontal: 5}, displayButton]}>{item}</Button>
+  })
 
   const Stack = createStackNavigator();
 
   return (
-    <Layout style={{flex: 1}}>
-      <Button onPressOut={() => {dispatch(LOGOUT())}}>Logout</Button>
+    <Layout style={[{flex: 1}]}>
+      {/* <Button onPressOut={() => {dispatch(LOGOUT())}}>Logout</Button> */}
       <Divider />
-      {
-        toggleOption ?
-        <ScrollView horizontal={true} style={{ maxHeight: 50 }}>
-          <Layout style={{ flexDirection: 'row'}}>{ buttonOptions }</Layout>
-        </ScrollView> :
-        <TouchableHighlight onPress={() => setToggleOption(!toggleOption)}>
-          <Layout style={{flexDirection:'row', justifyContent:'space-between'}}>
-            <Text category='h2'>{ category } Events</Text>
-            <Button
-              onPressOut={() => navigation.navigate('Create')}
-              disabled={ events_status.loading }
-            >Create Event</Button>
-          </Layout>
-        </TouchableHighlight>
-      }
+      <Layout style={{paddingVertical: 10}}>
+        {
+          toggleOption ?
+          <ScrollView horizontal={true} style={{ maxHeight: 50 }}>
+            <Layout style={{ flexDirection: 'row', paddingVertical: 10}}>{ buttonOptions }</Layout>
+          </ScrollView> :
+          <TouchableHighlight onPress={() => setToggleOption(!toggleOption)}>
+            <Layout style={{flexDirection:'row', justifyContent:'space-between', backgroundColor: '#f8f8f8', paddingVertical: 5, paddingHorizontal: 15}}>
+              <Text category='h3'>{ category } Events</Text>
+              <Button
+                onPressOut={() => navigation.navigate('Create')}
+                disabled={ events_status.loading }
+                size="small"
+              >
+                Create Event
+              </Button>
+            </Layout>
+          </TouchableHighlight>
+        }
+      </Layout>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Content" component={ eventListContainer } />
       </Stack.Navigator>

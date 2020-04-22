@@ -56,26 +56,11 @@ function DetailItem({ navigation }) {
     }
   }, [event]);
 
-  // console.log(event);
-  // console.log(event.image_url);
-
   let parsedLoc;
   if (event.location) {
     parsedLoc = JSON.parse(event.location);
   }
 
-  // let tagsList = <></>;
-  // if (event.EventTags) {
-  //   tagsList = event.EventTags.map((item) => (
-  //     <Button
-  //       size="tiny"
-  //       key={item.TagId}
-  //       style={{ backgroundColor: "grey", borderColor.id].isConfirm: "grey" }}
-  //     >
-  //       {item.Tag.name}
-  //     </Button>
-  //   ));
-  // }
   let ownerActionStyle = "none";
   console.log(userCred, event.User);
   if (event.User) {
@@ -84,14 +69,6 @@ function DetailItem({ navigation }) {
     ownerActionStyle =
       Number(userCred.id) === Number(event.User.id) ? "flex" : "none";
   }
-
-  // let attendedActionStyle = "flex";
-  // if (userCred.id && event.Attendees) {
-  //   event.Attendees.forEach((item) => {
-  //     console.log(item);
-  //     if (item.User.id === userCred.id) attendedActionStyle = "none";
-  //   });
-  // }
 
   function pressDelete() {
     dispatch(
@@ -135,7 +112,7 @@ function DetailItem({ navigation }) {
 
   return (
     <Layout
-      style={{ flex: 1, paddingTop: 5, paddingBottom: 0, paddingHorizontal: 5 }}
+      style={[styles.container, { paddingBottom: 0, paddingHorizontal: 5 }]}
     >
       <ScrollView>
         <Layout
@@ -143,15 +120,20 @@ function DetailItem({ navigation }) {
             {
               paddingTop: 5,
               borderTopWidth: 5,
-              borderRightWidth: 5,
               borderLeftWidth: 5,
-              borderTopRightRadius: 100,
+              borderTopRightRadius: 10,
               borderTopLeftRadius: 10,
             },
             styles.card[event.category],
           ]}
         >
-          <Text category="h2" style={{ paddingLeft: 5 }}>
+          {event.image_url && (
+            <Image
+              source={{ uri: apiURL + "/" + event.image_url }}
+              style={[styles.fullScreenBox, { marginHorizontal: 1 }]}
+            />
+          )}
+          <Text category="h2" style={{ paddingLeft: 5, fontWeight: 'bold', textAlign: 'center' }}>
             {event.name}
           </Text>
         </Layout>
@@ -161,21 +143,15 @@ function DetailItem({ navigation }) {
             styles.card[event.category],
           ]}
         >
-          <Text category="h6">{event.description}</Text>
           <Text style={{ fontWeight: "bold", fontSize: 11 }}>
-            A {event.category} Event
+            A {event.category} event
           </Text>
+          <Layout style={{marginVertical: 10}}>
+            <Text category="h5">{event.description}</Text>
+          </Layout>
           {/* <Layout style={{ flexDirection: "row", flexWrap: "wrap" }}>
             {tagsList}
           </Layout> */}
-          {event.image_url && (
-            <ScrollView horizontal={true} style={{ minHeight: 100 }}>
-              <Image
-                source={{ uri: apiURL + "/" + event.image_url }}
-                style={{ height: 100, width: 150, marginHorizontal: 1 }}
-              />
-            </ScrollView>
-          )}
           <Layout style={{ display: "flex" }}>
             {!isCreator && (
               <Layout>
@@ -231,7 +207,7 @@ function DetailItem({ navigation }) {
             )}
             <Layout style={{ display: ownerActionStyle }}>
               <Text category="h6" style={{ textAlign: "center" }}>
-                You are creator of this event{"\n"}
+                You are the creator of this event{"\n"}
               </Text>
               <Layout
                 style={{ flexDirection: "row", justifyContent: "space-evenly" }}
@@ -255,38 +231,6 @@ function DetailItem({ navigation }) {
               </Layout>
             </Layout>
           </Layout>
-          <TouchableHighlight
-            onPressOut={() =>
-              navigation.navigate("Atendee", { eventId: event.id })
-            }
-          >
-            <Layout
-              style={{ flexDirection: "row", flexWrap: "wrap", maxHeight: 100 }}
-            >
-              <Text category="h5" style={{ textAlign: "center" }}>
-                Atendees List >
-              </Text>
-              {filteredAttendeesList.length !== 0 &&
-                filteredAttendeesList.map((item) => (
-                  <TouchableHighlight
-                    key={item.id + "atendee"}
-                    style={{ margin: 5 }}
-                    onPressOut={() =>
-                      navigation.navigate("Profile", { userId: item.User.id })
-                    }
-                  >
-                    <Layout style={{ elevation: 5, borderRadius: 20 }}>
-                      <Avatar
-                        size="medium"
-                        source={{
-                          uri: `https://api.adorable.io/avatars/125/${item.User.email}.png`,
-                        }}
-                      />
-                    </Layout>
-                  </TouchableHighlight>
-                ))}
-            </Layout>
-          </TouchableHighlight>
           {parsedLoc && (
             <Layout
               style={{
@@ -354,6 +298,39 @@ function DetailItem({ navigation }) {
               </MapView>
             </Layout>
           )}
+          <TouchableHighlight
+            onPressOut={() =>
+              navigation.navigate("Atendee", { eventId: event.id })
+            }
+            style={{ marginTop: 10 }}
+          >
+            <Layout
+              style={{ flexDirection: "row", flexWrap: "wrap", maxHeight: 100 }}
+            >
+              <Text category="h5" style={{ textAlign: "center" }}>
+                Atendees List >
+              </Text>
+              {filteredAttendeesList.length !== 0 &&
+                filteredAttendeesList.map((item) => (
+                  <TouchableHighlight
+                    key={item.id + "atendee"}
+                    style={{ margin: 5 }}
+                    onPressOut={() =>
+                      navigation.navigate("Profile", { userId: item.User.id })
+                    }
+                  >
+                    <Layout style={{ elevation: 5, borderRadius: 20 }}>
+                      <Avatar
+                        size="medium"
+                        source={{
+                          uri: `https://api.adorable.io/avatars/125/${item.User.email}.png`,
+                        }}
+                      />
+                    </Layout>
+                  </TouchableHighlight>
+                ))}
+            </Layout>
+          </TouchableHighlight>
         </Layout>
       </ScrollView>
     </Layout>

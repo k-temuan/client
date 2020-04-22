@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Text, Button, Avatar } from '@ui-kitten/components';
 import { TouchableHighlight } from 'react-native';
+import { styles } from '../../styles';
 
 function AttendeeListItem({ attendee, navigation }) {
   return (

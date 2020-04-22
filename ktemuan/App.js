@@ -25,7 +25,7 @@ export default function App() {
   return (
     <Provider store={ store }>
       <NavigationContainer>
-        <ApplicationProvider {...eva} theme={ eva.dark }>
+        <ApplicationProvider {...eva} theme={ eva.light }>
           <IconRegistry icons={EvaIconsPack} />
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="LoadingSplash" component={ LoadingSplashScreen } />

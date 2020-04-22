@@ -1,5 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Text, Icon, Layout } from '@ui-kitten/components';
+import { TouchableHighlight } from 'react-native';
 
 import BrowseScreen from '../screens/BrowseScreen';
 import DetailScreen from '../screens/DetailsScreen';
@@ -9,6 +11,16 @@ import AtendeeListScreen from '../screens/AtendeeListScreen';
 import UpdateEventForm from '../screens/UpdateEventForm';
 
 const Stack = createStackNavigator()
+
+const StackHeader = ({ navigation }) => {
+  return (
+    <Layout style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+      <TouchableHighlight onPressOut={() => navigation.toggleDrawer()}>
+        <Text category="h6">Menu</Text>
+      </TouchableHighlight>
+    </Layout>
+  )
+}
 
 function BrowsingStack() {
   return (

@@ -3,6 +3,7 @@ import { Layout, Text, Button, Avatar } from '@ui-kitten/components';
 import { useSelector } from 'react-redux';
 import { TouchableHighlight } from 'react-native';
 import AttendeeListItem from './AttendeeListItem';
+import { styles } from '../../styles';
 
 function AttendeeList({ navigation }) {
   const attendees = useSelector(state => state.attendees.attendees);
@@ -15,8 +16,7 @@ function AttendeeList({ navigation }) {
   }
 
   return (
-    <Layout>
-      <Text>2 page swipe: joined, all invited user?</Text>
+    <Layout style={[styles.container]}>
       { attendeeList }
     </Layout>
   )

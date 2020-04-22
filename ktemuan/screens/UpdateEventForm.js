@@ -249,7 +249,7 @@ function UpdateEventForm({ navigation, route }) {
             value={name}
             onChangeText={setName}
             caption={
-              updateEventError.name || "Error placeholder (empty for future)"
+              updateEventError.name || ""
             }
             status={updateEventError.name ? "danger" : ""}
           />
@@ -259,14 +259,14 @@ function UpdateEventForm({ navigation, route }) {
             multiline={true}
             value={description}
             onChangeText={setDescription}
-            caption={updateEventError.description || "Error placeholder"}
+            caption={updateEventError.description || ""}
             status={updateEventError.description ? "danger" : ""}
           />
           <Input
             placeholder="Maximum antendees"
             value={maxAttendees}
             onChangeText={setMaxAttendees}
-            caption={updateEventError.maxAttendees || "Error placeholder"}
+            caption={updateEventError.maxAttendees || ""}
             status={updateEventError.maxAttendees ? "danger" : ""}
           />
           {/* <Input disabled={true} placeholder={"Image name"} /> */}
@@ -284,7 +284,7 @@ function UpdateEventForm({ navigation, route }) {
                 ? moment(date).format("LLLL")
                 : `Please set date and time`
             }
-            caption={updateEventError.datetime || "Error placeholder"}
+            caption={updateEventError.datetime || ""}
             status={updateEventError.datetime ? "danger" : ""}
           />
           <Button onPressOut={() => setDatePicker(true)}>
