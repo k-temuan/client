@@ -33,9 +33,11 @@ function AttendeeListItem({ attendee, navigation }) {
           <Text style={{ marginTop: 2, marginBottom: 10 }}>
             {attendee.email}
           </Text>
-          <Button disabled={true} size="tiny">
-            Joined
-          </Button>
+          <Layout style={{ width: 60 }}>
+            <Button disabled={true} size="tiny">
+              Joined
+            </Button>
+          </Layout>
         </Layout>
       </Layout>
     </TouchableHighlight>
