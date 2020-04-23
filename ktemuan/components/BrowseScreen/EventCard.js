@@ -140,7 +140,7 @@ function EventCard({ navigation, event }) {
                   {event.category.toUpperCase()}
                 </Text>
               </Layout>
-              <Text category="h1" style={{ fontWeight: "bold" }}>
+              <Text category="h2" style={{ fontWeight: "bold" }}>
                 {event.name}
               </Text>
               <Text
@@ -150,7 +150,7 @@ function EventCard({ navigation, event }) {
                   fontSize: 16,
                 }}
               >
-                {JSON.parse(event.location).description}
+                {JSON.parse(event.location).name}
               </Text>
               <Text style={{ fontStyle: "italic" }}>{event_datetime}</Text>
               <Layout
