@@ -16,15 +16,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { FETCH_TAGS } from "../store/tagAction";
 import moment from "moment";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import {
-  PATCH_EVENT,
-} from "../store/action/updateAction";
+import { PATCH_EVENT } from "../store/action/updateAction";
 
 import { YellowBox, Image } from "react-native";
 
-YellowBox.ignoreWarnings([
-  "VirtualizedLists should never be nested",
-]);
+YellowBox.ignoreWarnings(["VirtualizedLists should never be nested"]);
 
 function UpdateEventForm({ navigation, route }) {
   const dispatch = useDispatch();
@@ -54,8 +50,7 @@ function UpdateEventForm({ navigation, route }) {
   );
   const [location, setLocation] = React.useState({});
   const [fileObj, setFileObj] = React.useState({
-    uri:
-      "https://clinicaesperanza.org/wp-content/uploads/2019/09/profile-placeholder.png",
+    uri: "https://clipartart.com/images/image-placeholder-clipart-1.png",
     name: "userProfile.jpg",
     type: "image/jpg",
   });
@@ -80,7 +75,7 @@ function UpdateEventForm({ navigation, route }) {
   }
   function handleAttendeeInput(text) {
     if (Number(text) || Number(text) >= 0) {
-      setMaxAttendees(text)
+      setMaxAttendees(text);
     }
   }
   function pickImage() {
@@ -140,7 +135,7 @@ function UpdateEventForm({ navigation, route }) {
       minLength={2} // minimum length of text to search
       autoFocus={false}
       returnKeyType={"search"} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-      keyboardAppearance={"light"} 
+      keyboardAppearance={"light"}
       listViewDisplayed="false" // true/false/undefined
       fetchDetails={true}
       renderDescription={(row) => row.description} // custom description render
@@ -210,8 +205,8 @@ function UpdateEventForm({ navigation, route }) {
       filterReverseGeocodingByTypes={[
         "locality",
         "administrative_area_level_3",
-      ]} 
-      debounce={200} 
+      ]}
+      debounce={200}
     />
   );
 
@@ -249,7 +244,7 @@ function UpdateEventForm({ navigation, route }) {
           <Input
             placeholder="Maximum antendees"
             value={maxAttendees}
-            onChangeText={text => handleAttendeeInput(text)}
+            onChangeText={(text) => handleAttendeeInput(text)}
             caption={updateEventError.maxAttendees || ""}
             status={updateEventError.maxAttendees ? "danger" : ""}
           />
@@ -257,7 +252,7 @@ function UpdateEventForm({ navigation, route }) {
             {google}
           </View>
           <Divider />
-          <Layout style={{marginVertical: 10}}>
+          <Layout style={{ marginVertical: 10 }}>
             <Input
               placeholder="Date and Time"
               onFocus={() => setDatePicker(true)}
@@ -283,7 +278,13 @@ function UpdateEventForm({ navigation, route }) {
             onCancel={() => setDatePicker(false)}
           />
           <Button onPress={pickImage}>Renew Event Image</Button>
-          <Layout style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+          <Layout
+            style={{
+              marginTop: 12,
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
             <Button
               onPressOut={submitForm}
               disabled={update_status.postLoading}
