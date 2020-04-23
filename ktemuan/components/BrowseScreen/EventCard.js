@@ -130,7 +130,7 @@ function EventCard({ navigation, event }) {
                     source={{
                       uri: `https://api.adorable.io/avatars/125/${event.User.email}.png`,
                     }}
-                    style={{marginRight: 7}}
+                    style={{ marginRight: 7 }}
                   />
                   <Text style={{ fontSize: 18 }}>
                     {event.User.firstname} {event.User.lastname}
@@ -140,7 +140,7 @@ function EventCard({ navigation, event }) {
                   {event.category.toUpperCase()}
                 </Text>
               </Layout>
-              <Text category="h1" style={{ fontWeight: "bold" }}>
+              <Text category="h2" style={{ fontWeight: "bold" }}>
                 {event.name}
               </Text>
               <Text
@@ -150,7 +150,7 @@ function EventCard({ navigation, event }) {
                   fontSize: 16,
                 }}
               >
-                {JSON.parse(event.location).description}
+                {JSON.parse(event.location).name}
               </Text>
               <Text style={{ fontStyle: "italic" }}>{event_datetime}</Text>
               <Layout
@@ -164,7 +164,10 @@ function EventCard({ navigation, event }) {
                 <Text
                   style={[
                     {
-                      backgroundColor: "#00b8a9",
+                      color: "#000",
+                      fontWeight: "normal",
+                      fontSize: 14,
+                      backgroundColor: "#cccccc",
                       paddingVertical: 5,
                       paddingHorizontal: 10,
                       borderRadius: 5,
@@ -177,7 +180,14 @@ function EventCard({ navigation, event }) {
                 <Text
                   style={[
                     diplayJoinStatus,
-                    { backgroundColor: "#00b8a9", padding: 5, borderRadius: 5 },
+                    {
+                      color: "#000",
+                      fontWeight: "normal",
+                      fontSize: 14,
+                      backgroundColor: "#cccccc",
+                      padding: 5,
+                      borderRadius: 5,
+                    },
                   ]}
                 >
                   Joined
@@ -186,7 +196,14 @@ function EventCard({ navigation, event }) {
                     <Text>Join Event</Text>
                   </Button> */}
                 {!isCreator && (
-                  <Layout>
+                  <Layout
+                    style={{
+                      backgroundColor: "transparent",
+                      flexDirection: "row",
+                      justifyContent: "space-evenly",
+                      // marginVertical: 10,
+                    }}
+                  >
                     {!isConfirm ? (
                       <Button
                         size="small"
@@ -203,7 +220,7 @@ function EventCard({ navigation, event }) {
                           pressRemoveJoin();
                         }}
                       >
-                        Cancel Join
+                        Cancel Participation
                       </Button>
                     )}
                   </Layout>

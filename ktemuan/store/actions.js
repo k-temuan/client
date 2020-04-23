@@ -375,18 +375,18 @@ export const FETCH_PROFILE_DETAIL = (userId) => {
   };
 };
 
-export const FETCH_EVENT_DETAIL = (id) => {
-  return (dispatch, getState) => {
-    // handle cached events
-    // console.log(getState())
-    const cachedEvent = getState().event.events;
-    const event = cachedEvent.filter((item) => item.id === id)[0];
-    dispatch({
-      type: "SET_EVENT",
-      payload: event,
-    });
-  };
-};
+// export const FETCH_EVENT_DETAIL = (id) => {
+//   return (dispatch, getState) => {
+//     // handle cached events
+//     // console.log(getState())
+//     const cachedEvent = getState().event.events;
+//     const event = cachedEvent.filter((item) => item.id === id)[0];
+//     dispatch({
+//       type: "SET_EVENT",
+//       payload: event,
+//     });
+//   };
+// };
 
 export const FETCH_EVENT_ATENDEES = (eventId) => {
   return (dispatch, getState) => {

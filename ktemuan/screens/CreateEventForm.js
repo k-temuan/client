@@ -68,8 +68,7 @@ function CreateEventForm({ navigation }) {
   const [maxAttendees, setMaxAttendees] = React.useState("");
   const [location, setLocation] = React.useState({});
   const [fileObj, setFileObj] = React.useState({
-    uri:
-      "https://clinicaesperanza.org/wp-content/uploads/2019/09/profile-placeholder.png",
+    uri: "https://clipartart.com/images/image-placeholder-clipart-1.png",
     name: "userProfile.jpg",
     type: "image/jpg",
   });
@@ -81,7 +80,7 @@ function CreateEventForm({ navigation }) {
   }
   function handleAttendeeInput(text) {
     if (Number(text) || Number(text) >= 0) {
-      setMaxAttendees(text)
+      setMaxAttendees(text);
     }
   }
   function pickImage() {
@@ -159,13 +158,13 @@ function CreateEventForm({ navigation }) {
       query={{
         // available options: https://developers.google.com/places/web-service/autocomplete
         key: "AIzaSyDF0f24ema_HtTZrUCZSo3iG7HIk8Jkd-Q",
-        language: "en", 
+        language: "en",
       }}
       styles={{
         textInputContainer: {
           width: "100%",
           height: 50,
-          backgroundColor: "#fff",
+          backgroundColor: "#f8f9fd",
           borderRadius: 5,
           borderWidth: 1,
           borderColor: "#e5e9f2",
@@ -210,7 +209,7 @@ function CreateEventForm({ navigation }) {
       filterReverseGeocodingByTypes={[
         "locality",
         "administrative_area_level_3",
-      ]} 
+      ]}
       debounce={200}
     />
   );
@@ -234,9 +233,7 @@ function CreateEventForm({ navigation }) {
             placeholder={radio + " Event Name"}
             value={name}
             onChangeText={setName}
-            caption={
-              submitEventError.name || ""
-            }
+            caption={submitEventError.name || ""}
             status={submitEventError.name ? "danger" : ""}
           />
           <Input
@@ -251,7 +248,9 @@ function CreateEventForm({ navigation }) {
           <Input
             placeholder="Maximum antendees"
             value={maxAttendees}
-            onChangeText={ text => { handleAttendeeInput(text) }}
+            onChangeText={(text) => {
+              handleAttendeeInput(text);
+            }}
             caption={submitEventError.maxAttendees || ""}
             status={submitEventError.maxAttendees ? "danger" : ""}
           />
@@ -260,7 +259,7 @@ function CreateEventForm({ navigation }) {
             {google}
           </View>
           <Divider />
-          <Layout style={{marginVertical: 10}}>
+          <Layout style={{ marginVertical: 10 }}>
             <Input
               placeholder="Date and Time"
               onFocus={() => setDatePicker(true)}
@@ -273,7 +272,9 @@ function CreateEventForm({ navigation }) {
               status={submitEventError.datetime ? "danger" : ""}
               disabled={true}
             />
-            <Button size="medium" onPressOut={() => setDatePicker(true)}>Set Event Date</Button>
+            <Button size="medium" onPressOut={() => setDatePicker(true)}>
+              Set Event Date
+            </Button>
           </Layout>
           <Divider />
           <DateTimePickerModal
@@ -283,9 +284,23 @@ function CreateEventForm({ navigation }) {
             onConfirm={handleConfirmDate}
             onCancel={() => setDatePicker(false)}
           />
-          <Image source={fileObj} style={{width: 100, height: 100, alignSelf: 'center', marginBottom: 5}} />
+          <Image
+            source={fileObj}
+            style={{
+              width: 100,
+              height: 100,
+              alignSelf: "center",
+              marginBottom: 5,
+            }}
+          />
           <Button onPress={pickImage}>Upload Event Image</Button>
-          <Layout style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-evenly' }}>
+          <Layout
+            style={{
+              marginTop: 12,
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
             <Button onPressOut={submitForm} disabled={event_status.postLoading}>
               Create Event
             </Button>
