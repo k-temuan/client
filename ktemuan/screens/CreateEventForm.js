@@ -164,7 +164,7 @@ function CreateEventForm({ navigation }) {
         textInputContainer: {
           width: "100%",
           height: 50,
-          backgroundColor: "#fff",
+          backgroundColor: "#f8f9fd",
           borderRadius: 5,
           borderWidth: 1,
           borderColor: "#e5e9f2",
